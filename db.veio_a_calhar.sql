@@ -1,55 +1,64 @@
 CREATE DATABASE [veio_a_calhar_db]
 USE [veio_a_calhar_db]
 
-CREATE TABLE [Products](
+CREATE TABLE [Produtos](
     [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL,
-    [Name] TEXT NOT NULL,
-    [Description] TEXT NOT NULL,
-    [Price] INT NOT NULL,
-    [Quantity] DECIMAL(6, 2) NOT NULL,
-    [Unity] TEXT NOT NULL
+    [Nome] TEXT NOT NULL,
+    [Descricao] TEXT NOT NULL,
+    [Valor] BIGINT NOT NULL,
+    [Quantidade] DECIMAL(6, 2) NOT NULL,
+    [Unidade] TEXT NOT NULL
 )
 go
 
-CREATE TABLE [Person_Types](
+CREATE TABLE [Tipos_Pessoa](
     [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL,
-    [Type] VARCHAR(10) NOT NULL
+    [Tipo] VARCHAR(10) NOT NULL
 )
 go
 
-CREATE TABLE [Person](
+CREATE TABLE [Pessoas](
     [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL,
-    [Name] TEXT NOT NULL,
-    [Document] TEXT,
-    [Phone] TEXT,
-    [Address] TEXT NOT NULL,
-    [Person_Type] BIGINT REFERENCES [Person_Types]
+    [Nome] TEXT NOT NULL,
+    [Documento] TEXT,
+    [Telefone] TEXT,
+    [Endereco] TEXT NOT NULL,
+    [Tipo_Pessoa] BIGINT REFERENCES [Tipos_Pessoa]
 )
 go
 
-CREATE TABLE [Customers](
-    [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL REFERENCES [Person],
+CREATE TABLE [Clientes](
+    [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL REFERENCES [Pessoas],
+    [Id_Pessoa] BIGINT FOREIGN KEY REFERENCES [Pessoas],
 )
 go
 
-CREATE TABLE [Providers](
-    [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL REFERENCES [Person],
+CREATE TABLE [Fornecedores](
+    [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL REFERENCES [Pessoas],
+    [Id_Pessoa] BIGINT FOREIGN KEY REFERENCES [Pessoas],
 )
 go
 
-CREATE TABLE [Sales](
+CREATE TABLE [Vendas](
     [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL,
-    [Customer] BIGINT NOT NULL REFERENCES [Customers],
-    [Date] DATETIME NOT NULL
+    [Cliente] BIGINT NOT NULL REFERENCES [Clientes],
+    [Data] DATETIME NOT NULL
 )
 go
 
-CREATE TABLE [Sales_Products](
-    [Sales_Id] BIGINT NOT NULL REFERENCES [SALES],
-    [Product_Id] BIGINT NOT NULL REFERENCES [PRODUCTS],
-    [Quantity] INT NOT NULL,
-    [Value] INT NOT NULL,
-    CHECK (Quantity > 0),
-    PRIMARY KEY (Sales_Id, Product_Id)
+CREATE TABLE [Vendas_Produtos](
+    [Id_Venda] BIGINT NOT NULL REFERENCES [Vendas],
+    [Id_Produto] BIGINT NOT NULL REFERENCES [Produtos],
+    [Quantidade] INT NOT NULL,
+    [Valor] BIGINT NOT NULL,
+    CHECK (Quantidade > 0),
+    PRIMARY KEY (Id_Venda, Id_Produto)
+)
+go
+
+CREATE TABLE [Pagamentos](
+    [Id] BIGINT PRIMARY KEY IDENTITY NOT NULL,
+    [Credor] BIGINT NOT NULL REFERENCES [Pessoas],
+    [Valor] BIGINT NOT NULL,
 )
 go
