@@ -12,6 +12,7 @@ CREATE TABLE Fornecedores(
     Descricao VARCHAR(MAX),
     Endereco VARCHAR(32) NOT NULL,
     CNPJ VARCHAR(14) NOT NULL,
+	IE VARCHAR(12) NOT NULL,
 	PIX VARCHAR(64)
 )
 
@@ -43,10 +44,14 @@ CREATE TABLE Produtos(
     Id_Unidade BIGINT FOREIGN KEY REFERENCES Tipos_Unidades(Id)
 )
 
+
+--Todo: criar tabela pra pessoa juridica com nome fantasia e inscrição estadual
+
 CREATE TABLE Pessoas(
     Id BIGINT PRIMARY KEY IDENTITY,
     Nome VARCHAR(32) NOT NULL,
     CPF VARCHAR(11),
+	RG VARCHAR(12),
     Endereco VARCHAR(32) NOT NULL,
 	PIX VARCHAR(64)
 )
@@ -112,6 +117,8 @@ INSERT INTO Status_Venda VALUES ('Orçamento')
 INSERT INTO Status_Venda VALUES ('Em aberto')
 INSERT INTO Status_Venda VALUES ('Concluído')
 INSERT INTO Status_Venda VALUES ('Cancelado')
+
+--Todo: fazer tabela para compras, similar a  de vendas
 
 CREATE TABLE Vendas(
     Id BIGINT PRIMARY KEY IDENTITY,
