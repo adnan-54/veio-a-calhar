@@ -4,5 +4,7 @@ public class Funcionario : PessoaFisica
 {
     public Cargo? Cargo { get; init; }
 
-    public long Salario { get; init; }
+    public Usuario? Usuario { get; init; }
+
+    public decimal Salario { get; init; }
 }

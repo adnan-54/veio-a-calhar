@@ -8,6 +8,10 @@ public abstract class Pessoa
 
     public string? Observacoes { get; init; }
 
+    public string? PIX { get; init; }
+
+    public string? Email { get; init; }
+
     public IEnumerable<Endereco>? Enderecos { get; init; }
 
     public IEnumerable<Telefone>? Telefones { get; init; }
