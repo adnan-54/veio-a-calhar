@@ -1,9 +1,7 @@
 namespace VeioACalhar.Models;
 
-public abstract class Pessoa
+public abstract class Pessoa : Entidade
 {
-    public int Id { get; init; }
-
     public string? Nome { get; init; }
 
     public string? Observacoes { get; init; }

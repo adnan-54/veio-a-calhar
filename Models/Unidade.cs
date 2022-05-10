@@ -1,9 +1,7 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Unidade
+public class Unidade : Entidade
 {
-    public int Id { get; init; }
-
     public string? Nome { get; init; }
 
     public string? Sigla { get; init; }

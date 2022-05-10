@@ -1,8 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace VeioACalhar.Models;
 
-public class Cargo
+[Table("Cargos")]
+public class Cargo : Entidade
 {
-    public int Id { get; init; }
-
+    [Column("Nome")]
     public string? Nome { get; init; }
 }

@@ -1,8 +1,6 @@
 ﻿namespace VeioACalhar.Models;
 
-public class StatusTransacao
+public class StatusTransacao : Entidade
 {
-    public int Id { get; init; }
-
     public string? Status { get; init; }
 }

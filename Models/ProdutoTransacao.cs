@@ -1,6 +1,6 @@
 ﻿namespace VeioACalhar.Models;
 
-public class ProdutoTransacao
+public class ProdutoTransacao : Entidade
 {
     public Produto? Produto { get; init; }
 

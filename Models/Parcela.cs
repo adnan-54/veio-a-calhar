@@ -1,9 +1,7 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Parcela
+public class Parcela : Entidade
 {
-    public int Id { get; init; }
-
     public int Numero { get; init; }
 
     public decimal Valor { get; init; }

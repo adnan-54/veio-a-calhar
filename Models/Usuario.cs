@@ -1,9 +1,7 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Usuario
+public class Usuario : Entidade
 {
-    public int Id { get; init; }
-
     public string? Nome { get; init; }
 
     public DateOnly DataCadastro { get; init; }

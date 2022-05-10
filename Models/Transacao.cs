@@ -1,9 +1,7 @@
 ﻿namespace VeioACalhar.Models;
 
-public abstract class Transacao
+public abstract class Transacao : Entidade
 {
-    public int Id { get; init; }
-
     public Pagamento? Pagamento { get; init; }
 
     public StatusTransacao? Status { get; init; }

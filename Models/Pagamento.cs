@@ -1,9 +1,7 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Pagamento
+public class Pagamento : Entidade
 {
-    public int Id { get; init; }
-
     public Pessoa? Pagador { get; init; }
 
     public Pessoa? Favorecido { get; init; }

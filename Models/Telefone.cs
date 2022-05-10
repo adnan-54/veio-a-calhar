@@ -1,10 +1,13 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace VeioACalhar.Models;
 
-public class Telefone
+[Table("Telefones")]
+public class Telefone : Entidade
 {
-    public int Id { get; init; }
-
+    [Column("Numero")]
     public string? Numero { get; init; }
 
+    [Column("Observacoes")]
     public string? Observacoes { get; init; }
 }

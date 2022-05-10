@@ -1,16 +1,23 @@
-namespace VeioACalhar;
+using System.Data.SqlClient;
+using VeioACalhar.Data;
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IDbConnection, SqlDbConnection>(serviceProvider =>
 {
-    public static void Main(string[] args)
-    {
-        WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddControllersWithViews();
+    var logger = serviceProvider.GetRequiredService<ILogger<SqlDbConnection>>();
+    var connection = new SqlConnection(connectionString);
+    return new SqlDbConnection(connection, logger);
+});
 
-        WebApplication? app = builder.Build();
-        app.MapDefaultControllerRoute();
-        // app.UseAuthentication();
+var app = builder.Build();
 
-        app.Run();
-    }
-}
+app.UseExceptionHandler("/Home/Error");
+
+//app.UseAuthentication();
+//app.UseAuthorization();
+
+app.MapDefaultControllerRoute();
+app.Run();

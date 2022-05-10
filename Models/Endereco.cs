@@ -1,9 +1,7 @@
 namespace VeioACalhar.Models;
 
-public class Endereco
+public class Endereco : Entidade
 {
-    public int Id { get; init; }
-
     public string? Logradouro { get; init; }
 
     public int Numero { get; init; }

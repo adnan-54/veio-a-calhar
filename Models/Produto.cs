@@ -1,9 +1,7 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Produto
+public class Produto : Entidade
 {
-    public int Id { get; init; }
-
     public Fornecedor? Fornecedor { get; init; }
 
     public string? Nome { get; init; }
