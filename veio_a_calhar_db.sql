@@ -101,7 +101,7 @@ CREATE TABLE Formas_Pagamento(
 	Maximo_Parcelas INT NOT NULL,
 )
 
-INSERT INTO Formas_Pagamento VALUES('Dinheiro', 1)
+INSERT INTO Formas_Pagamento() VALUES('Dinheiro', 1)
 INSERT INTO Formas_Pagamento VALUES('Boleto', 1)
 INSERT INTO Formas_Pagamento VALUES('Pix', 1)
 INSERT INTO Formas_Pagamento VALUES('Cartão Crédito', 12)

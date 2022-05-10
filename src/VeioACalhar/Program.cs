@@ -1,5 +1,6 @@
 using System.Data.SqlClient;
 using VeioACalhar.Data;
+using VeioACalhar.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -11,6 +12,8 @@ builder.Services.AddSingleton<IDbConnection, SqlDbConnection>(serviceProvider =>
     var connection = new SqlConnection(connectionString);
     return new SqlDbConnection(connection, logger);
 });
+
+builder.Services.AddSingleton<ICargoRepository, CargoRepository>();
 
 var app = builder.Build();
 

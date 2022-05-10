@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace VeioACalhar.Data;
 
@@ -11,6 +12,30 @@ public class SqlDbConnection : IDbConnection
     {
         this.connection = connection;
         this.logger = logger;
+    }
+
+    public int ExecuteScalar(SqlCommand command)
+    {
+        try
+        {
+            connection.Open();
+            command.Connection = connection;
+            var result = command.ExecuteScalar();
+            if (result is int id)
+                return id;
+            return -1;
+
+        }
+        catch(Exception ex)
+        {
+            logger.Log(LogLevel.Error, ex, "An error occurred while executing the command");
+            throw;
+        }
+        finally
+        {
+            if(connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
     }
 
     public void ExecuteNonQuery(SqlCommand command)
