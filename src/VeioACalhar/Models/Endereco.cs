@@ -2,6 +2,8 @@ namespace VeioACalhar.Models;
 
 public class Endereco : Entidade
 {
+    public Pessoa Pessoa { get; set; }
+
     public string? Logradouro { get; set; }
 
     public int Numero { get; set; }

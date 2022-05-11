@@ -1,19 +1,17 @@
 using System.Data.SqlClient;
-using VeioACalhar.Data;
-using VeioACalhar.Services;
+using VeioACalhar.Commands;
+using VeioACalhar.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IDbConnection, SqlDbConnection>(serviceProvider =>
-{
-    var logger = serviceProvider.GetRequiredService<ILogger<SqlDbConnection>>();
-    var connection = new SqlConnection(connectionString);
-    return new SqlDbConnection(connection, logger);
-});
-
+builder.Services.AddSingleton<SqlConnection>(provider => new SqlConnection(connectionString));
+builder.Services.AddSingleton<ISqlCommandFactory, SqlCommandFactory>();
 builder.Services.AddSingleton<ICargoRepository, CargoRepository>();
+builder.Services.AddSingleton<ITelefoneRepository, TelefoneRepository>();
+builder.Services.AddSingleton<IEnderecoRepository, EnderecoRepository>();
+builder.Services.AddSingleton<IPessoaRepository, PessoaRepository>();
 
 var app = builder.Build();
 
