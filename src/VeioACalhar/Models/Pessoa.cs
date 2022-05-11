@@ -2,15 +2,15 @@ namespace VeioACalhar.Models;
 
 public abstract class Pessoa : Entidade
 {
-    public string? Nome { get; init; }
+    public string? Nome { get; set; }
 
-    public string? Observacoes { get; init; }
+    public string? Observacoes { get; set; }
 
-    public string? PIX { get; init; }
+    public string? PIX { get; set; }
 
-    public string? Email { get; init; }
+    public string? Email { get; set; }
 
-    public IEnumerable<Endereco>? Enderecos { get; init; }
+    public IEnumerable<Endereco>? Enderecos { get; set; }
 
-    public IEnumerable<Telefone>? Telefones { get; init; }
+    public IEnumerable<Telefone>? Telefones { get; set; }
 }

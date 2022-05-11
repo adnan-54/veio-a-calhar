@@ -48,7 +48,7 @@ public abstract class GenericRepository<TModel> : IGenericRepository<TModel> whe
     {
         var command = new SqlCommand($"SELECT * FROM {tableName}");
         var reader = dbConnection.ExecuteReader(command);
-        while(reader.Read())
+        while (reader.Read())
             yield return CreateFromReader(reader);
     }
 
@@ -72,7 +72,7 @@ public abstract class GenericRepository<TModel> : IGenericRepository<TModel> whe
 
     public void Delete(TModel model)
     {
-        if(!model.Id.HasValue)
+        if (!model.Id.HasValue)
             throw new Exception("The given model does not have an Id");
         var id = model.Id.Value;
 
@@ -123,11 +123,11 @@ public abstract class GenericRepository<TModel> : IGenericRepository<TModel> whe
     {
         if (!reader.HasRows)
             throw new Exception("No entities found with the given id");
-        if(!reader.Read())
+        if (!reader.Read())
             throw new Exception("An error occurred in the reader");
         var model = new TModel();
 
-        foreach(var mapping in mappings)
+        foreach (var mapping in mappings)
         {
             var property = mapping.Value;
             var value = reader[mapping.Key];

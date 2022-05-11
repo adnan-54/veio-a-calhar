@@ -6,8 +6,8 @@ namespace VeioACalhar.Models;
 public class Telefone : Entidade
 {
     [Column("Numero")]
-    public string? Numero { get; init; }
+    public string? Numero { get; set; }
 
     [Column("Observacoes")]
-    public string? Observacoes { get; init; }
+    public string? Observacoes { get; set; }
 }

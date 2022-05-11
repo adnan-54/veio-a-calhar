@@ -26,14 +26,14 @@ public class SqlDbConnection : IDbConnection
             return -1;
 
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logger.Log(LogLevel.Error, ex, "An error occurred while executing the command");
             throw;
         }
         finally
         {
-            if(connection.State != ConnectionState.Closed)
+            if (connection.State != ConnectionState.Closed)
                 connection.Close();
         }
     }

@@ -2,17 +2,17 @@
 
 public class Produto : Entidade
 {
-    public Fornecedor? Fornecedor { get; init; }
+    public Fornecedor? Fornecedor { get; set; }
 
-    public string? Nome { get; init; }
+    public string? Nome { get; set; }
 
-    public string? Descricao { get; init; }
+    public string? Descricao { get; set; }
 
-    public decimal Preco_Custo { get; init; }
+    public decimal Preco_Custo { get; set; }
 
-    public decimal Preco_Venda { get; init; }
+    public decimal Preco_Venda { get; set; }
 
-    public decimal Quantidade { get; init; }
+    public decimal Quantidade { get; set; }
 
-    public Unidade? Unidade { get; init; }
+    public Unidade? Unidade { get; set; }
 }

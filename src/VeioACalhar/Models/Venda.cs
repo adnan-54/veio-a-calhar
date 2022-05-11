@@ -2,11 +2,11 @@
 
 public class Venda : Transacao
 {
-    public DateOnly PrevisaoInicio { get; init; }
+    public DateOnly PrevisaoInicio { get; set; }
 
-    public DateOnly PrevisaoEntrega { get; init; }
+    public DateOnly PrevisaoEntrega { get; set; }
 
-    public IEnumerable<Pessoa>? Clientes { get; init; }
+    public IEnumerable<Pessoa>? Clientes { get; set; }
 
-    public IEnumerable<Funcionario>? Funcionarios { get; init; }
+    public IEnumerable<Funcionario>? Funcionarios { get; set; }
 }

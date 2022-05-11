@@ -2,15 +2,15 @@ namespace VeioACalhar.Models;
 
 public class Endereco : Entidade
 {
-    public string? Logradouro { get; init; }
+    public string? Logradouro { get; set; }
 
-    public int Numero { get; init; }
+    public int Numero { get; set; }
 
-    public string? Bairro { get; init; }
+    public string? Bairro { get; set; }
 
-    public string? Cidade { get; init; }
+    public string? Cidade { get; set; }
 
-    public string? CEP { get; init; }
+    public string? CEP { get; set; }
 
-    public string? Observacoes { get; init; }
+    public string? Observacoes { get; set; }
 }

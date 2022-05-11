@@ -2,5 +2,5 @@
 
 public class StatusTransacao : Entidade
 {
-    public string? Status { get; init; }
+    public string? Status { get; set; }
 }

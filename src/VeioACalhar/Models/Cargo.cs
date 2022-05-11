@@ -6,5 +6,5 @@ namespace VeioACalhar.Models;
 public class Cargo : Entidade
 {
     [Column("Nome")]
-    public string? Nome { get; init; }
+    public string? Nome { get; set; }
 }

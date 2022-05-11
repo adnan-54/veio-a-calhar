@@ -2,7 +2,7 @@
 
 public class FormaPagamento : Entidade
 {
-    public string? Forma { get; init; }
+    public string? Forma { get; set; }
 
-    public int MaximoParcelas { get; init; }
+    public int MaximoParcelas { get; set; }
 }

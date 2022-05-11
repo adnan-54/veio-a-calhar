@@ -2,15 +2,15 @@
 
 public abstract class Transacao : Entidade
 {
-    public Pagamento? Pagamento { get; init; }
+    public Pagamento? Pagamento { get; set; }
 
-    public StatusTransacao? Status { get; init; }
+    public StatusTransacao? Status { get; set; }
 
-    public DateOnly DataCriacao { get; init; }
+    public DateOnly DataCriacao { get; set; }
 
-    public DateOnly DataFechamento { get; init; }
+    public DateOnly DataFechamento { get; set; }
 
-    public string? Observacoes { get; init; }
+    public string? Observacoes { get; set; }
 
-    public IEnumerable<ProdutoTransacao>? Produtos { get; init; }
+    public IEnumerable<ProdutoTransacao>? Produtos { get; set; }
 }

@@ -30,20 +30,20 @@ CREATE TABlE Pessoas_Telefones(
 )
 
 CREATE TABLE Pessoas_Juridicas(
-    Id_Pessoa INT PRIMARY KEY REFERENCES Pessoas(Id),
+    Id INT PRIMARY KEY REFERENCES Pessoas(Id),
     Nome_Fantasia VARCHAR(64),
     IE VARCHAR(14),
     CNPJ VARCHAR(14)
 )
 
 CREATE TABLE Pessoas_Fisicas(
-    Id_Pessoa INT PRIMARY KEY REFERENCES Pessoas(Id),
+    Id INT PRIMARY KEY REFERENCES Pessoas(Id),
     CPF VARCHAR(11),
     RG VARCHAR(12)
 )
 
 CREATE TABLE Clientes(
-    Id_Pessoa INT PRIMARY KEY REFERENCES Pessoas(Id),
+    Id INT PRIMARY KEY REFERENCES Pessoas(Id),
 )
 
 CREATE TABLE Cargos(
@@ -63,14 +63,14 @@ CREATE TABLE Usuarios(
 )
 
 CREATE TABLE Funcionarios(
-    Id_Pessoas_Fisicas INT PRIMARY KEY REFERENCES Pessoas_Fisicas(Id),
+    Id INT PRIMARY KEY REFERENCES Pessoas_Fisicas(Id),
     Id_Cargo INT FOREIGN KEY REFERENCES Cargos(Id),
 	Id_Usuario INT FOREIGN KEY REFERENCES Usuarios(Id),
 	Salario INT NOT NULL
 )
 
 CREATE TABLE Fornecedores(
-    Id_Pessoas_Juridicas INT PRIMARY KEY REFERENCES Pessoas_Juridicas(Id),
+    Id INT PRIMARY KEY REFERENCES Pessoas_Juridicas(Id),
 )
 
 CREATE TABLE Unidades(
@@ -101,7 +101,7 @@ CREATE TABLE Formas_Pagamento(
 	Maximo_Parcelas INT NOT NULL,
 )
 
-INSERT INTO Formas_Pagamento() VALUES('Dinheiro', 1)
+INSERT INTO Formas_Pagamento VALUES('Dinheiro', 1)
 INSERT INTO Formas_Pagamento VALUES('Boleto', 1)
 INSERT INTO Formas_Pagamento VALUES('Pix', 1)
 INSERT INTO Formas_Pagamento VALUES('Cartão Crédito', 12)
@@ -142,19 +142,17 @@ CREATE TABLE Transacoes(
 	Id_Status INT FOREIGN KEY REFERENCES Status_Transacaos(Id),
     Data_Criacao DATETIME NOT NULL,
 	Data_Fechamento DATETIME,
-	Observacoes VARCHAR(MAX),
-
+	Observacoes VARCHAR(MAX)
 )
 
 CREATE TABLE Transacoes_Produtos(
+    Id INT PRIMARY KEY IDENTITY,
     Id_Transacoes INT REFERENCES Transacoes(Id),
     Id_Produto INT REFERENCES Produtos(Id),
     Quantidade INT NOT NULL,
     Valor_Unitario INT NOT NULL,
 	Valor_Total INT NOT NULL,
-	Desconto_Unitario INT NOT NULL,
-    CHECK (Quantidade > 0),
-    PRIMARY KEY (Id_Transacoes, Id_Produto)
+	Desconto_Unitario INT NOT NULL
 )
 
 CREATE TABLE Vendas(
@@ -164,20 +162,19 @@ CREATE TABLE Vendas(
 )
 
 CREATE TABLE Venda_Clientes(
+    Id INT PRIMARY KEY IDENTITY,
 	Id_Venda INT FOREIGN KEY REFERENCES Vendas(Id),
-	Id_Cliente INT FOREIGN KEY REFERENCES Clientes(Id),
-	PRIMARY KEY (Id_Venda, Id_Cliente)
+	Id_Cliente INT FOREIGN KEY REFERENCES Clientes(Id)
 )
 
 CREATE TABLE Venda_Funcionarios(
+    Id INT PRIMARY KEY IDENTITY,
 	Id_Venda INT FOREIGN KEY REFERENCES Vendas(Id),
-	Id_Funcionario INT FOREIGN KEY REFERENCES Funcionarios(Id),
-	PRIMARY KEY (Id_Venda, Id_Funcionario)
-	
+	Id_Funcionario INT FOREIGN KEY REFERENCES Funcionarios(Id)
 )
 
 CREATE TABLE Compras(
-    Id INT PRIMARY KEY IDENTITY,
+    Id INT PRIMARY KEY REFERENCES Transacoes(Id),
     Id_Fornecedor INT FOREIGN KEY REFERENCES Fornecedores(Id),
 	Data_Compra DATETIME NOT NULL,
 	Data_Entrega DATETIME NOT NULL,
