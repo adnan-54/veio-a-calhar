@@ -27,17 +27,8 @@ public class PessoaRepository : IPessoaRepository
 
         pessoa.Id = (int)command.ExecuteScalar()!;
 
-        if (pessoa.Telefones is not null)
-        {
-            foreach (var telefone in pessoa.Telefones)
-                telefoneRepository.Create(telefone);
-        }
-
-        if (pessoa.Enderecos is not null)
-        {
-            foreach (var endereco in pessoa.Enderecos)
-                enderecoRepository.Create(endereco);
-        }
+        telefoneRepository.CreateFrom(pessoa);
+        enderecoRepository.CreateFrom(pessoa);
 
         return pessoa;
     }
@@ -77,8 +68,8 @@ public class PessoaRepository : IPessoaRepository
 
     public void Delete(Pessoa pessoa)
     {
-        telefoneRepository.DeleteAllFrom(pessoa);
-        enderecoRepository.DeleteAllFrom(pessoa);
+        telefoneRepository.DeleteFrom(pessoa);
+        enderecoRepository.DeleteFrom(pessoa);
 
         using var command = commandFactory.Create("DELETE FROM Pessoas WHERE Id=@Id");
         command.AddParameter("@Id", pessoa.Id);
@@ -97,7 +88,7 @@ public class PessoaRepository : IPessoaRepository
         };
 
         pessoa.Telefones = telefoneRepository.GetFrom(pessoa);
-        pessoa.Enderecos = enderecoRepository.GetFor(pessoa);
+        pessoa.Enderecos = enderecoRepository.GetFrom(pessoa);
 
         return pessoa;
     }

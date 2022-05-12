@@ -2,7 +2,7 @@ namespace VeioACalhar.Models;
 
 public class Endereco : Entidade
 {
-    public Pessoa Pessoa { get; set; }
+    public Pessoa? Pessoa { get; set; }
 
     public string? Logradouro { get; set; }
 
@@ -11,6 +11,8 @@ public class Endereco : Entidade
     public string? Bairro { get; set; }
 
     public string? Cidade { get; set; }
+    
+    public string? Estado { get; set; }
 
     public string? CEP { get; set; }
 

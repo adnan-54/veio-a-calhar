@@ -18,15 +18,16 @@ CREATE TABLE Pessoas_Enderecos(
     Numero INT NOT NULL,
     Bairro VARCHAR(32) NOT NULL,
     Cidade VARCHAR(16) NOT NULL,
+    Estado VARCHAR(16) NOT NULL,
     CEP VARCHAR(9),
-    Observacao VARCHAR(1024)
+    Observacoes VARCHAR(1024)
 )
 
 CREATE TABlE Pessoas_Telefones(
     Id INT PRIMARY KEY IDENTITY,
     Id_Pessoa INT FOREIGN KEY REFERENCES Pessoas(Id),
     Numero VARCHAR(14) NOT NULL,
-    Observacao VARCHAR(1024)
+    Observacoes VARCHAR(1024)
 )
 
 CREATE TABLE Pessoas_Juridicas(

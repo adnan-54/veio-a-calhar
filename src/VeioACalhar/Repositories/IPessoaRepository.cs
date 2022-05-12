@@ -1,7 +1,5 @@
-﻿using VeioACalhar.Models;
+﻿namespace VeioACalhar.Repositories;
 
-namespace VeioACalhar.Repositories;
-
-public interface IPessoaRepository : IRepository<Pessoa>
+public interface IPessoaRepository
 {
 }
