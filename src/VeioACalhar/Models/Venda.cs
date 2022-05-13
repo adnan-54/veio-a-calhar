@@ -1,12 +1,18 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Venda : Transacao
+public record Venda : Transacao
 {
-    public DateOnly PrevisaoInicio { get; set; }
+    public Venda()
+    {
+        Clientes = Enumerable.Empty<Pessoa>();
+        Funcionarios = Enumerable.Empty<Funcionario>();
+    }
 
-    public DateOnly PrevisaoEntrega { get; set; }
+    public DateOnly PrevisaoInicio { get; init; }
 
-    public IEnumerable<Pessoa>? Clientes { get; set; }
+    public DateOnly PrevisaoEntrega { get; init; }
 
-    public IEnumerable<Funcionario>? Funcionarios { get; set; }
+    public IEnumerable<Pessoa> Clientes { get; init; }
+
+    public IEnumerable<Funcionario> Funcionarios { get; init; }
 }

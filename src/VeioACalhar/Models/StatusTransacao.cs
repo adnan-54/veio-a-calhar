@@ -1,6 +1,11 @@
 ﻿namespace VeioACalhar.Models;
 
-public class StatusTransacao : Entidade
+public record StatusTransacao : Entidade
 {
-    public string? Status { get; set; }
+    public StatusTransacao()
+    {
+        Status = string.Empty;
+    }
+
+    public string Status { get; init; }
 }

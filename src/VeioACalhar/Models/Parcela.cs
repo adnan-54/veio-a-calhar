@@ -1,20 +1,20 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Parcela : Entidade
+public record Parcela : Entidade
 {
-    public int Numero { get; set; }
+    public int Numero { get; init; }
 
-    public decimal Valor { get; set; }
+    public decimal Valor { get; init; }
 
-    public int PorcentagemDesconto { get; set; }
+    public int PorcentagemDesconto { get; init; }
 
     public decimal ValorDesconto => Valor - Valor * PorcentagemDesconto / 100;
 
-    public decimal ValorPago { get; set; }
+    public decimal ValorPago { get; init; }
 
-    public DateOnly DataVencimento { get; set; }
+    public DateOnly DataVencimento { get; init; }
 
-    public DateOnly? DataPagamento { get; set; }
+    public DateOnly DataPagamento { get; init; }
 
-    public bool Paga => DataPagamento != null;
+    public bool Paga => DataPagamento != default;
 }

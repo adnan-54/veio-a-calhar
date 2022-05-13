@@ -22,32 +22,33 @@ public class PessoaRepository : IPessoaRepository
         using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, PIX, Email) OUTPUT INSERTED.Id VALUES (@Nome, @Observacoes, @PIX, @Email)");
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
-        command.AddParameter("@PIX", pessoa.PIX);
+        command.AddParameter("@PIX", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
 
-        pessoa.Id = (int)command.ExecuteScalar()!;
+        var id = (int)command.ExecuteScalar()!;
 
         telefoneRepository.CreateFrom(pessoa);
         enderecoRepository.CreateFrom(pessoa);
 
-        return pessoa;
+        return pessoa with { Id = id };
     }
 
-    public Pessoa? Get(int id)
+    public Pessoa Get(int id)
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas WHERE Id=@Id");
         command.AddParameter("@Id", id);
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         if (reader.Read())
             return CreatePessoa(reader);
-        return null;
+        return new();
     }
 
     public IEnumerable<Pessoa> Get()
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas");
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
+
         while (reader.Read())
             yield return CreatePessoa(reader);
     }
@@ -57,7 +58,7 @@ public class PessoaRepository : IPessoaRepository
         using var command = commandFactory.Create("UPDATE Pessoas SET Nome=@Nome, Observacoes=@Observacoes, PIX=@PIX, Email=@Email WHERE Id=@Id");
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
-        command.AddParameter("@PIX", pessoa.PIX);
+        command.AddParameter("@PIX", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
         command.AddParameter("@Id", pessoa.Id);
         command.ExecuteNonQuery();
@@ -83,13 +84,13 @@ public class PessoaRepository : IPessoaRepository
             Id = (int)reader["Id"],
             Nome = (string)reader["Nome"],
             Observacoes = (string)reader["Observacoes"],
-            PIX = (string)reader["PIX"],
-            Email = (string)reader["Email"]
+            Pix = (string)reader["PIX"],
+            Email = (string)reader["Email"],
         };
 
-        pessoa.Telefones = telefoneRepository.GetFrom(pessoa);
-        pessoa.Enderecos = enderecoRepository.GetFrom(pessoa);
+        var telefones = telefoneRepository.GetFrom(pessoa);
+        var enderecos = enderecoRepository.GetFrom(pessoa);
 
-        return pessoa;
+        return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 }

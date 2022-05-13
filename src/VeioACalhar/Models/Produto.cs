@@ -1,18 +1,26 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Produto : Entidade
+public record Produto : Entidade
 {
-    public Fornecedor? Fornecedor { get; set; }
+    public Produto()
+    {
+        Fornecedor = new();
+        Nome = string.Empty;
+        Descricao = string.Empty;
+        Unidade = new();
+    }
 
-    public string? Nome { get; set; }
+    public Fornecedor Fornecedor { get; init; }
 
-    public string? Descricao { get; set; }
+    public string Nome { get; init; }
 
-    public decimal Preco_Custo { get; set; }
+    public string Descricao { get; init; }
 
-    public decimal Preco_Venda { get; set; }
+    public decimal Preco_Custo { get; init; }
 
-    public decimal Quantidade { get; set; }
+    public decimal Preco_Venda { get; init; }
 
-    public Unidade? Unidade { get; set; }
+    public decimal Quantidade { get; init; }
+
+    public Unidade Unidade { get; init; }
 }

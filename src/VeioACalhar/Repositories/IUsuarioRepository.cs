@@ -6,7 +6,7 @@ public interface IUsuarioRepository
 {
     Usuario Create(Usuario usuario);
 
-    Usuario? Get(int id);
+    Usuario Get(int id);
 
     IEnumerable<Usuario> Get();
 

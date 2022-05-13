@@ -1,6 +1,3 @@
 namespace VeioACalhar.Models;
 
-public class ClienteFisico : PessoaFisica
-{
-
-}
+public record ClienteFisico : PessoaFisica;

@@ -1,4 +1,5 @@
-﻿using VeioACalhar.Commands;
+﻿using System.Data.SqlClient;
+using VeioACalhar.Commands;
 using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
@@ -17,42 +18,28 @@ public class CargoRepository : ICargoRepository
         using var command = commandFactory.Create("INSERT INTO Cargos(Nome) OUTPUT INSERTED.Id VALUES (@Nome)");
         command.AddParameter("@Nome", cargo.Nome);
 
-        cargo.Id = (int)command.ExecuteScalar()!;
-
-        return cargo;
+        var id = (int)command.ExecuteScalar()!;
+        return cargo with { Id = id };
     }
 
-    public Cargo? Get(int id)
+    public Cargo Get(int id)
     {
         using var command = commandFactory.Create("SELECT * FROM Cargos WHERE Id=@Id");
         command.AddParameter("@Id", id);
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         if (reader.Read())
-        {
-            return new Cargo()
-            {
-                Id = (int)reader["Id"],
-                Nome = (string)reader["Nome"]
-            };
-        }
-
-        return null;
+            return CreateCargo(reader);
+        return new();
     }
 
     public IEnumerable<Cargo> Get()
     {
         using var command = commandFactory.Create("SELECT * FROM Cargos");
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         while (reader.Read())
-        {
-            yield return new Cargo()
-            {
-                Id = (int)reader["Id"],
-                Nome = (string)reader["Nome"]
-            };
-        }
+            yield return CreateCargo(reader);
     }
 
     public void Update(Cargo cargo)
@@ -71,4 +58,14 @@ public class CargoRepository : ICargoRepository
 
         command.ExecuteNonQuery();
     }
+
+    private static Cargo CreateCargo(SqlDataReader reader)
+    {
+        return new()
+        {
+            Id = (int)reader["Id"],
+            Nome = (string)reader["Nome"]
+        };
+    }
+
 }

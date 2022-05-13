@@ -1,10 +1,17 @@
 namespace VeioACalhar.Models;
 
-public class PessoaJuridica : Pessoa
+public record PessoaJuridica : Pessoa
 {
-    public string? NomeFantasia { get; set; }
+    public PessoaJuridica()
+    {
+        NomeFantasia = string.Empty;
+        InscricaoEstadual = string.Empty;
+        Cnpj = string.Empty;
+    }
 
-    public string? InscricaoEstadual { get; set; }
+    public string NomeFantasia { get; init; }
 
-    public string? CNPJ { get; set; }
+    public string InscricaoEstadual { get; init; }
+
+    public string Cnpj { get; init; }
 }

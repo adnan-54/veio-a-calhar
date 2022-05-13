@@ -1,8 +1,13 @@
 ﻿namespace VeioACalhar.Models;
 
-public class FormaPagamento : Entidade
+public record FormaPagamento : Entidade
 {
-    public string? Forma { get; set; }
+    public FormaPagamento()
+    {
+        Forma = string.Empty;
+    }
 
-    public int MaximoParcelas { get; set; }
+    public string Forma { get; init; }
+
+    public int MaximoParcelas { get; init; }
 }

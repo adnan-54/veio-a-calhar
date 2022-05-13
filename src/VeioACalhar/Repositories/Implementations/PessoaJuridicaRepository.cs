@@ -20,80 +20,68 @@ public class PessoaJuridicaRepository : IPessoaJuridicaRepository
         var pessoa = pessoaRepository.Create(pessoaJuridica);
         using var command = commandFactory.Create("INSERT INTO Pessoas_Juridicas(Id, CNPJ, Inscricao_Estadual) VALUES (@Id, @CNPJ, @Inscricao_Estadual)");
         command.AddParameter("@Id", pessoa.Id);
-        command.AddParameter("@CNPJ", pessoaJuridica.CNPJ);
+        command.AddParameter("@CNPJ", pessoaJuridica.Cnpj);
         command.AddParameter("@Inscricao_Estadual", pessoaJuridica.InscricaoEstadual);
+        command.ExecuteNonQuery();
 
-        pessoaJuridica.Id = pessoa.Id;
-        pessoaJuridica.Nome = pessoa.Nome;
-        pessoaJuridica.Observacoes = pessoa.Observacoes;
-        pessoaJuridica.PIX = pessoa.PIX;
-        pessoaJuridica.Email = pessoa.Email;
-        pessoaJuridica.Enderecos = pessoa.Enderecos;
-        pessoaJuridica.Telefones = pessoa.Telefones;
-
-        return pessoaJuridica;
+        return pessoaJuridica with { Id = pessoa.Id };
     }
 
-    public PessoaJuridica? Get(int id)
+    public PessoaJuridica Get(int id)
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Juridicas WHERE Id = @Id");
         command.AddParameter("@Id", id);
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
-        if (!reader.Read())
-            return null;
-
-        var pessoa = pessoaRepository.Get(id)!;
-
-        return CreatePessoaJuridica(pessoa, reader);
+        if (reader.Read())
+            return CreatePessoaJuridica(reader);
+        return new();
     }
 
     public IEnumerable<PessoaJuridica> Get()
     {
-        var pessoas = pessoaRepository.Get();
-        foreach (var pessoa in pessoas)
-        {
-            using var command = commandFactory.Create("SELECT * FROM Pessoas_Juridicas WHERE Id = @Id");
-            command.AddParameter("@Id", pessoa.Id);
-            var reader = command.ExecuteReader();
+        using var command = commandFactory.Create("SELECT * FROM Pessoas_Juridicas");
+        using var reader = command.ExecuteReader();
 
-            if (!reader.Read())
-                continue;
-
-            yield return CreatePessoaJuridica(pessoa, reader);
-        }
+        while (reader.Read())
+            yield return CreatePessoaJuridica(reader);
     }
 
     public void Update(PessoaJuridica pessoaJuridica)
     {
-        pessoaRepository.Update(pessoaJuridica);
         using var command = commandFactory.Create("UPDATE Pessoas_Juridicas SET CNPJ = @CNPJ, Inscricao_Estadual = @Inscricao_Estadual WHERE Id = @Id");
         command.AddParameter("@Id", pessoaJuridica.Id);
-        command.AddParameter("@CNPJ", pessoaJuridica.CNPJ);
+        command.AddParameter("@CNPJ", pessoaJuridica.Cnpj);
         command.AddParameter("@Inscricao_Estadual", pessoaJuridica.InscricaoEstadual);
         command.ExecuteNonQuery();
+
+        pessoaRepository.Update(pessoaJuridica);
     }
 
     public void Delete(PessoaJuridica pessoaJuridica)
     {
-        pessoaRepository.Delete(pessoaJuridica);
         using var command = commandFactory.Create("DELETE FROM Pessoas_Juridicas WHERE Id = @Id");
         command.AddParameter("@Id", pessoaJuridica.Id);
         command.ExecuteNonQuery();
+
+        pessoaRepository.Delete(pessoaJuridica);
     }
 
-    private static PessoaJuridica CreatePessoaJuridica(Pessoa pessoa, SqlDataReader reader)
+    private PessoaJuridica CreatePessoaJuridica(SqlDataReader reader)
     {
+        var id = (int)reader["Id"];
+        var pessoa = pessoaRepository.Get(id);
+
         return new()
         {
-            Id = pessoa.Id,
+            Id = id,
             Nome = pessoa.Nome,
             Observacoes = pessoa.Observacoes,
-            PIX = pessoa.PIX,
+            Pix = pessoa.Pix,
             Email = pessoa.Email,
             Enderecos = pessoa.Enderecos,
             Telefones = pessoa.Telefones,
-            CNPJ = (string)reader["CNPJ"],
+            Cnpj = (string)reader["CNPJ"],
             InscricaoEstadual = (string)reader["Inscricao_Estadual"]
         };
     }

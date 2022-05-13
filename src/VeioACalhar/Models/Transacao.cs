@@ -1,16 +1,24 @@
 ﻿namespace VeioACalhar.Models;
 
-public abstract class Transacao : Entidade
+public record Transacao : Entidade
 {
-    public Pagamento? Pagamento { get; set; }
+    public Transacao()
+    {
+        Pagamento = new();
+        Status = new();
+        Observacoes = string.Empty;
+        Produtos = Enumerable.Empty<ProdutoTransacao>();
+    }
 
-    public StatusTransacao? Status { get; set; }
+    public Pagamento Pagamento { get; init; }
 
-    public DateOnly DataCriacao { get; set; }
+    public StatusTransacao Status { get; init; }
 
-    public DateOnly DataFechamento { get; set; }
+    public DateOnly DataCriacao { get; init; }
 
-    public string? Observacoes { get; set; }
+    public DateOnly DataFechamento { get; init; }
 
-    public IEnumerable<ProdutoTransacao>? Produtos { get; set; }
+    public string Observacoes { get; init; }
+
+    public IEnumerable<ProdutoTransacao> Produtos { get; init; }
 }

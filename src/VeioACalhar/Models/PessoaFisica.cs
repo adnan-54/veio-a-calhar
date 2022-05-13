@@ -1,8 +1,14 @@
 namespace VeioACalhar.Models;
 
-public class PessoaFisica : Pessoa
+public record PessoaFisica : Pessoa
 {
-    public string? CPF { get; set; }
+    public PessoaFisica()
+    {
+        Cpf = string.Empty;
+        Rg = string.Empty;
+    }
 
-    public string? RG { get; set; }
+    public string Cpf { get; init; }
+
+    public string Rg { get; init; }
 }

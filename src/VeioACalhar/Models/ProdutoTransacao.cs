@@ -1,14 +1,19 @@
 ﻿namespace VeioACalhar.Models;
 
-public class ProdutoTransacao : Entidade
+public record ProdutoTransacao : Entidade
 {
-    public Produto? Produto { get; set; }
+    public ProdutoTransacao()
+    {
+        Produto = new();
+    }
 
-    public int Quantidade { get; set; }
+    public Produto Produto { get; init; }
 
-    public decimal ValorUnitario { get; set; }
+    public int Quantidade { get; init; }
 
-    public int DescontoUnitario { get; set; }
+    public decimal ValorUnitario { get; init; }
+
+    public int DescontoUnitario { get; init; }
 
     public decimal ValorTotal => (ValorUnitario - ValorUnitario * DescontoUnitario / 100) * Quantidade;
 }

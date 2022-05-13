@@ -1,6 +1,11 @@
 namespace VeioACalhar.Models;
 
-public class Cargo : Entidade
+public record Cargo : Entidade
 {
-    public string? Nome { get; set; }
+    public Cargo()
+    {
+        Nome = string.Empty;
+    }
+
+    public string Nome { get; init; }
 }

@@ -1,10 +1,15 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Usuario : Entidade
+public record Usuario : Entidade
 {
-    public string? Login { get; set; }
+    public Usuario()
+    {
+        Login = string.Empty;
+    }
 
-    public DateOnly DataCadastro { get; set; }
+    public string Login { get; init; }
 
-    public bool Ativo { get; set; }
+    public DateOnly DataCadastro { get; init; }
+
+    public bool Ativo { get; init; }
 }

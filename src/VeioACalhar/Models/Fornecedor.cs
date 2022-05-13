@@ -1,6 +1,3 @@
 namespace VeioACalhar.Models;
 
-public class Fornecedor : PessoaJuridica
-{
-
-}
+public record Fornecedor : PessoaJuridica;

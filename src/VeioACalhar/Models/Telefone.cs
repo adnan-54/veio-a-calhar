@@ -1,10 +1,17 @@
 namespace VeioACalhar.Models;
 
-public class Telefone : Entidade
+public record Telefone : Entidade
 {
-    public Pessoa? Pessoa { get; set; }
+    public Telefone()
+    {
+        Pessoa = new();
+        Numero = string.Empty;
+        Observacoes = string.Empty;
+    }
 
-    public string? Numero { get; set; }
+    public Pessoa Pessoa { get; init; }
 
-    public string? Observacoes { get; set; }
+    public string Numero { get; init; }
+
+    public string Observacoes { get; init; }
 }

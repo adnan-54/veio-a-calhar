@@ -6,7 +6,7 @@ public interface IPessoaJuridicaRepository
 {
     PessoaJuridica Create(PessoaJuridica pessoaJuridica);
 
-    PessoaJuridica? Get(int id);
+    PessoaJuridica Get(int id);
 
     IEnumerable<PessoaJuridica> Get();
 

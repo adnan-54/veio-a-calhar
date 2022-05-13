@@ -1,8 +1,14 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Unidade : Entidade
+public record Unidade : Entidade
 {
-    public string? Nome { get; set; }
+    public Unidade()
+    {
+        Nome = string.Empty;
+        Sigla = string.Empty;
+    }
 
-    public string? Sigla { get; set; }
+    public string Nome { get; init; }
+
+    public string Sigla { get; init; }
 }

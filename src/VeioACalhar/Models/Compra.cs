@@ -1,10 +1,15 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Compra : Transacao
+public record Compra : Transacao
 {
-    public Fornecedor? Fornecedor { get; set; }
+    public Compra()
+    {
+        Fornecedor = new();
+    }
 
-    public DateOnly DataCompra { get; set; }
+    public Fornecedor Fornecedor { get; init; }
 
-    public DateOnly DataEntrega { get; set; }
+    public DateOnly DataCompra { get; init; }
+
+    public DateOnly DataEntrega { get; init; }
 }

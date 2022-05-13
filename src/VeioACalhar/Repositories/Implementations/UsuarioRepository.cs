@@ -20,27 +20,26 @@ public class UsuarioRepository : IUsuarioRepository
         command.AddParameter("@Data_Cadastro", usuario.DataCadastro);
         command.AddParameter("@Ativo", usuario.Ativo);
 
-        usuario.Id = (int)command.ExecuteScalar()!;
+        var id = (int)command.ExecuteScalar()!;
 
-        return usuario;
+        return usuario with { Id = id };
     }
-    
-    public Usuario? Get(int id)
+
+    public Usuario Get(int id)
     {
         using var command = sqlCommandFactory.Create("SELECT (Id, Login, Data_Cadastro, Ativo) FROM Usuarios WHERE Id = @Id");
         command.AddParameter("@Id", id);
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
-        if (!reader.Read())
-            return null;
-
-        return CreateUsuario(reader);
+        if (reader.Read())
+            return CreateUsuario(reader);
+        return new();
     }
 
     public IEnumerable<Usuario> Get()
     {
         using var command = sqlCommandFactory.Create("SELECT (Id, Login, Data_Cadastro, Ativo) FROM Usuarios");
-        var reader = command.ExecuteReader();
+        using var reader = command.ExecuteReader();
 
         while (reader.Read())
             yield return CreateUsuario(reader);

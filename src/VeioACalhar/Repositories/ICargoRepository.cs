@@ -6,7 +6,7 @@ public interface ICargoRepository
 {
     Cargo Create(Cargo cargo);
 
-    Cargo? Get(int id);
+    Cargo Get(int id);
 
     IEnumerable<Cargo> Get();
 

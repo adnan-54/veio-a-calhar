@@ -1,12 +1,20 @@
 ﻿namespace VeioACalhar.Models;
 
-public class Pagamento : Entidade
+public record Pagamento : Entidade
 {
-    public Pessoa? Pagador { get; set; }
+    public Pagamento()
+    {
+        Pagador = new();
+        Favorecido = new();
+        FormaPagamento = new();
+        Parcelas = Enumerable.Empty<Parcela>();
+    }
 
-    public Pessoa? Favorecido { get; set; }
+    public Pessoa Pagador { get; init; }
 
-    public FormaPagamento? FormaPagamento { get; set; }
+    public Pessoa Favorecido { get; init; }
 
-    public IEnumerable<Parcela>? Parcelas { get; set; }
+    public FormaPagamento FormaPagamento { get; init; }
+
+    public IEnumerable<Parcela> Parcelas { get; init; }
 }

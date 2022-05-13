@@ -1,10 +1,16 @@
 namespace VeioACalhar.Models;
 
-public class Funcionario : PessoaFisica
+public record Funcionario : PessoaFisica
 {
-    public Cargo? Cargo { get; set; }
+    public Funcionario()
+    {
+        Cargo = new();
+        Usuario = new();
+    }
 
-    public Usuario? Usuario { get; set; }
+    public Cargo Cargo { get; init; }
 
-    public decimal Salario { get; set; }
+    public Usuario Usuario { get; init; }
+
+    public decimal Salario { get; init; }
 }

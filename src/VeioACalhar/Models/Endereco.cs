@@ -1,20 +1,31 @@
 namespace VeioACalhar.Models;
 
-public class Endereco : Entidade
+public record Endereco : Entidade
 {
-    public Pessoa? Pessoa { get; set; }
+    public Endereco()
+    {
+        Pessoa = new();
+        Logradouro = string.Empty;
+        Bairro = string.Empty;
+        Cidade = string.Empty;
+        Estado = string.Empty;
+        Cep = string.Empty;
+        Observacoes = string.Empty;
+    }
 
-    public string? Logradouro { get; set; }
+    public Pessoa Pessoa { get; init; }
 
-    public int Numero { get; set; }
+    public string Logradouro { get; init; }
 
-    public string? Bairro { get; set; }
+    public int Numero { get; init; }
 
-    public string? Cidade { get; set; }
-    
-    public string? Estado { get; set; }
+    public string Bairro { get; init; }
 
-    public string? CEP { get; set; }
+    public string Cidade { get; init; }
 
-    public string? Observacoes { get; set; }
+    public string Estado { get; init; }
+
+    public string Cep { get; init; }
+
+    public string Observacoes { get; init; }
 }

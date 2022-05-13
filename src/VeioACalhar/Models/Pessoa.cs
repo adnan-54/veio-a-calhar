@@ -1,16 +1,26 @@
 namespace VeioACalhar.Models;
 
-public class Pessoa : Entidade
+public record Pessoa : Entidade
 {
-    public string? Nome { get; set; }
+    public Pessoa()
+    {
+        Nome = string.Empty;
+        Observacoes = string.Empty;
+        Pix = string.Empty;
+        Email = string.Empty;
+        Enderecos = Enumerable.Empty<Endereco>();
+        Telefones = Enumerable.Empty<Telefone>();
+    }
 
-    public string? Observacoes { get; set; }
+    public string Nome { get; init; }
 
-    public string? PIX { get; set; }
+    public string Observacoes { get; init; }
 
-    public string? Email { get; set; }
+    public string Pix { get; init; }
 
-    public IEnumerable<Endereco>? Enderecos { get; set; }
+    public string Email { get; init; }
 
-    public IEnumerable<Telefone>? Telefones { get; set; }
+    public IEnumerable<Endereco> Enderecos { get; init; }
+
+    public IEnumerable<Telefone> Telefones { get; init; }
 }

@@ -5,13 +5,13 @@ namespace VeioACalhar.Commands;
 
 public class SqlCommandWrapper : ISqlCommand
 {
-    private readonly SqlCommand command;
     private readonly SqlConnection connection;
+    private readonly SqlCommand command;
 
     public SqlCommandWrapper(string query, SqlConnection connection)
     {
-        command = new SqlCommand(query, connection);
         this.connection = connection;
+        command = new(query, connection);
     }
 
     public int ExecuteNonQuery()

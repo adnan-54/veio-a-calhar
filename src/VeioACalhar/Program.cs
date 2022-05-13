@@ -15,6 +15,7 @@ builder.Services.AddSingleton<IPessoaRepository, PessoaRepository>();
 builder.Services.AddSingleton<IPessoaFisicaRepository, PessoaFisicaRepository>();
 builder.Services.AddSingleton<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
 builder.Services.AddSingleton<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddSingleton<IFuncionarioRepository, FuncionarioRepository>();
 
 
 var app = builder.Build();
