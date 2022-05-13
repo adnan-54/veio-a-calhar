@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "/Views/Shared/Layout.cshtml";
+    ViewData["Title"] = "Entrar";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="d-flex flex-column">
+        <h1>
+            @ViewData["Title"]
+        </h1>
+        <form method="POST" action="/Login/SignIn">
+            <div class="form-outline mb-4">
+                <label class="form-label" for="username">Usuário</label>
+                <input class="form-control" type="text" name="username" id="username" />
+            </div>
+
+            <div class="form-outline mb-4">
+                <label class="form-label" for="password">Senha</label>
+                <input class="form-control" type="password" name="password" id="password" />
+            </div>
+
+            <button class="btn btn-primary btn-block mb-4" type="button">Entrar</button>
+        </form>
+    </div>
+</div>
+
