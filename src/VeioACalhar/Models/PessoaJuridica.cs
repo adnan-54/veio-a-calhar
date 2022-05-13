@@ -1,6 +1,6 @@
 namespace VeioACalhar.Models;
 
-public abstract class PessoaJuridica : Pessoa
+public class PessoaJuridica : Pessoa
 {
     public string? NomeFantasia { get; set; }
 

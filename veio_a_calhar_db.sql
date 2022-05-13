@@ -33,7 +33,7 @@ CREATE TABlE Pessoas_Telefones(
 CREATE TABLE Pessoas_Juridicas(
     Id INT PRIMARY KEY REFERENCES Pessoas(Id),
     Nome_Fantasia VARCHAR(64),
-    IE VARCHAR(14),
+    Inscricao_Estadual VARCHAR(14),
     CNPJ VARCHAR(14)
 )
 
@@ -43,8 +43,20 @@ CREATE TABLE Pessoas_Fisicas(
     RG VARCHAR(12)
 )
 
-CREATE TABLE Clientes(
-    Id INT PRIMARY KEY REFERENCES Pessoas(Id),
+CREATE TABLE Clientes_Juridicos(
+    Id INT PRIMARY KEY REFERENCES Pessoas_Juridicas(Id),
+)
+
+CREATE TABLE Clientes_Fisicos(
+    Id INT PRIMARY KEY REFERENCES Pessoas_Fisicas(Id),
+)
+
+CREATE TABLE Usuarios(
+    Id INT PRIMARY KEY IDENTITY,
+    Login VARCHAR(50) NOT NULL,
+	Senha VARCHAR(1024) NOT NULL,
+	Data_Cadastro DATETIME NOT NULL,
+	Ativo BIT NOT NULL
 )
 
 CREATE TABLE Cargos(
@@ -54,14 +66,6 @@ CREATE TABLE Cargos(
 
 INSERT INTO Cargos VALUES ('Dono')
 INSERT INTO Cargos VALUES ('Ajudante')
-
-CREATE TABLE Usuarios(
-    Id INT PRIMARY KEY IDENTITY,
-    Nome VARCHAR(50) NOT NULL,
-	Senha VARCHAR(50) NOT NULL,
-	Data_Cadastro DATETIME NOT NULL,
-	Ativo BIT NOT NULL
-)
 
 CREATE TABLE Funcionarios(
     Id INT PRIMARY KEY REFERENCES Pessoas_Fisicas(Id),

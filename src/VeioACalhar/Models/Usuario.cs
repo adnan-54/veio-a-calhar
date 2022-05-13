@@ -2,7 +2,7 @@
 
 public class Usuario : Entidade
 {
-    public string? Nome { get; set; }
+    public string? Login { get; set; }
 
     public DateOnly DataCadastro { get; set; }
 

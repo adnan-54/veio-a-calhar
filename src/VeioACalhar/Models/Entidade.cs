@@ -6,7 +6,7 @@ namespace VeioACalhar.Models;
 public abstract class Entidade
 {
     [Column("Id")]
-    public int? Id { get; set; }
+    public int Id { get; set; }
 
     public override bool Equals(object? obj)
     {
