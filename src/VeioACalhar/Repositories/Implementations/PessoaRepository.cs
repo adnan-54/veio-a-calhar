@@ -26,11 +26,12 @@ public class PessoaRepository : IPessoaRepository
         command.AddParameter("@Email", pessoa.Email);
 
         var id = (int)command.ExecuteScalar()!;
+        pessoa = pessoa with { Id = id };
 
-        telefoneRepository.CreateFrom(pessoa);
-        enderecoRepository.CreateFrom(pessoa);
+        var telefones = telefoneRepository.CreateFrom(pessoa);
+        var enderecos = enderecoRepository.CreateFrom(pessoa);
 
-        return pessoa with { Id = id };
+        return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 
     public Pessoa Get(int id)
@@ -53,7 +54,7 @@ public class PessoaRepository : IPessoaRepository
             yield return CreatePessoa(reader);
     }
 
-    public void Update(Pessoa pessoa)
+    public Pessoa Update(Pessoa pessoa)
     {
         using var command = commandFactory.Create("UPDATE Pessoas SET Nome=@Nome, Observacoes=@Observacoes, PIX=@PIX, Email=@Email WHERE Id=@Id");
         command.AddParameter("@Nome", pessoa.Nome);
@@ -63,8 +64,10 @@ public class PessoaRepository : IPessoaRepository
         command.AddParameter("@Id", pessoa.Id);
         command.ExecuteNonQuery();
 
-        telefoneRepository.UpdateFrom(pessoa);
-        enderecoRepository.UpdateFrom(pessoa);
+        var telefones = telefoneRepository.UpdateFrom(pessoa);
+        var enderecos = enderecoRepository.UpdateFrom(pessoa);
+
+        return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 
     public void Delete(Pessoa pessoa)

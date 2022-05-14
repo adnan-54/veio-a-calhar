@@ -45,7 +45,7 @@ public class UsuarioRepository : IUsuarioRepository
             yield return CreateUsuario(reader);
     }
 
-    public void Update(Usuario usuario)
+    public Usuario Update(Usuario usuario)
     {
         using var command = sqlCommandFactory.Create("UPDATE Usuarios SET Login = @Login, Data_Cadastro = @Data_Cadastro, Ativo = @Ativo WHERE Id = @Id");
         command.AddParameter("@Id", usuario.Id);
@@ -54,15 +54,19 @@ public class UsuarioRepository : IUsuarioRepository
         command.AddParameter("@Ativo", usuario.Ativo);
 
         command.ExecuteNonQuery();
+
+        return usuario;
     }
 
-    public void UpdatePassword(Usuario usuario, string password)
+    public Usuario UpdatePassword(Usuario usuario, string password)
     {
         using var command = sqlCommandFactory.Create("UPDATE Usuarios SET Senha = @Senha WHERE Id = @Id");
         command.AddParameter("@Id", usuario.Id);
         command.AddParameter("@Senha", password);
 
         command.ExecuteNonQuery();
+
+        return usuario;
     }
 
     public void Delete(Usuario usuario)

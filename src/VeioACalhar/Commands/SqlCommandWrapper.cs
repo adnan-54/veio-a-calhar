@@ -16,19 +16,19 @@ public class SqlCommandWrapper : ISqlCommand
 
     public int ExecuteNonQuery()
     {
-        connection.Open();
+        TryOpenConnection();
         return command.ExecuteNonQuery();
     }
 
     public SqlDataReader ExecuteReader()
     {
-        connection.Open();
+        TryOpenConnection();
         return command.ExecuteReader();
     }
 
     public object? ExecuteScalar()
     {
-        connection.Open();
+        TryOpenConnection();
         return command.ExecuteScalar();
     }
 
@@ -42,5 +42,11 @@ public class SqlCommandWrapper : ISqlCommand
         command.Dispose();
         if (connection.State != ConnectionState.Closed)
             connection.Close();
+    }
+
+    private void TryOpenConnection()
+    {
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
     }
 }

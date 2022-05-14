@@ -48,7 +48,7 @@ public class PessoaFisicaRepository : IPessoaFisicaRepository
             yield return CreatePessoaFisica(reader);
     }
 
-    public void Update(PessoaFisica pessoaFisica)
+    public PessoaFisica Update(PessoaFisica pessoaFisica)
     {
         using var command = commandFactory.Create("UPDATE Pessoas_Fisicas SET CPF = @CPF, RG = @RG WHERE Id = @Id");
         command.AddParameter("@Id", pessoaFisica.Id);
@@ -56,7 +56,7 @@ public class PessoaFisicaRepository : IPessoaFisicaRepository
         command.AddParameter("@RG", pessoaFisica.Rg);
         command.ExecuteNonQuery();
 
-        pessoaRepository.Update(pessoaFisica);
+        return (PessoaFisica)pessoaRepository.Update(pessoaFisica);
     }
 
     public void Delete(PessoaFisica pessoaFisica)

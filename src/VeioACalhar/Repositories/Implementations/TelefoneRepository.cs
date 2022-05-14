@@ -12,23 +12,10 @@ public class TelefoneRepository : ITelefoneRepository
         this.commandFactory = commandFactory;
     }
 
-    public Telefone Create(Telefone telefone)
+    public IEnumerable<Telefone> CreateFrom(Pessoa pessoa)
     {
-        using var command = commandFactory.Create("INSERT INTO Pessoas_Telefones(Id_Pessoa, Numero, Observacoes) OUTPUT INSERTED.Id VALUES (@Id_Pessoa, @Numero, @Observacoes)");
-        command.AddParameter("@Id_Pessoa", telefone.Pessoa.Id);
-        command.AddParameter("@Numero", telefone.Numero);
-        command.AddParameter("@Observacoes", telefone.Observacoes);
-
-        var id = (int)command.ExecuteScalar()!;
-
-        return telefone with { Id = id };
-    }
-
-    public void Delete(Telefone telefone)
-    {
-        using var command = commandFactory.Create("DELETE FROM Pessoas_Telefones WHERE Id = @Id");
-        command.AddParameter("@Id", telefone.Id);
-        command.ExecuteNonQuery();
+        foreach (var telefone in pessoa.Telefones)
+            yield return Create(telefone, pessoa);
     }
 
     public IEnumerable<Telefone> GetFrom(Pessoa pessoa)
@@ -49,10 +36,10 @@ public class TelefoneRepository : ITelefoneRepository
         }
     }
 
-    public void UpdateFrom(Pessoa pessoa)
+    public IEnumerable<Telefone> UpdateFrom(Pessoa pessoa)
     {
         DeleteFrom(pessoa);
-        CreateFrom(pessoa);
+        return CreateFrom(pessoa);
     }
 
     public void DeleteFrom(Pessoa pessoa)
@@ -62,9 +49,15 @@ public class TelefoneRepository : ITelefoneRepository
         command.ExecuteNonQuery();
     }
 
-    public void CreateFrom(Pessoa pessoa)
+    private Telefone Create(Telefone telefone, Pessoa pessoa)
     {
-        foreach (var telefone in pessoa.Telefones)
-            Create(telefone);
+        using var command = commandFactory.Create("INSERT INTO Pessoas_Telefones(Id_Pessoa, Numero, Observacoes) OUTPUT INSERTED.Id VALUES (@Id_Pessoa, @Numero, @Observacoes)");
+        command.AddParameter("@Id_Pessoa", pessoa.Id);
+        command.AddParameter("@Numero", telefone.Numero);
+        command.AddParameter("@Observacoes", telefone.Observacoes);
+
+        var id = (int)command.ExecuteScalar()!;
+
+        return telefone with { Id = id, Pessoa = pessoa };
     }
 }

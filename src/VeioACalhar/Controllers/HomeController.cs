@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VeioACalhar.Models;
+using VeioACalhar.Repositories;
 
 namespace VeioACalhar.Controllers;
 

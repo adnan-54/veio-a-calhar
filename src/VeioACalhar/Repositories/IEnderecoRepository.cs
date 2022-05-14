@@ -4,15 +4,11 @@ namespace VeioACalhar.Repositories;
 
 public interface IEnderecoRepository
 {
-    public Endereco Create(Endereco endereco);
+    IEnumerable<Endereco> CreateFrom(Pessoa pessoa);
 
-    public void Delete(Endereco endereco);
+    IEnumerable<Endereco> GetFrom(Pessoa pessoa);
 
-    public IEnumerable<Endereco> GetFrom(Pessoa pessoa);
-
-    void UpdateFrom(Pessoa pessoa);
+    IEnumerable<Endereco> UpdateFrom(Pessoa pessoa);
 
     void DeleteFrom(Pessoa pessoa);
-
-    void CreateFrom(Pessoa pessoa);
 }

@@ -51,7 +51,7 @@ public class FuncionarioRepository : IFuncionarioRepository
             yield return CreateFuncionario(reader);
     }
 
-    public void Update(Funcionario funcionario)
+    public Funcionario Update(Funcionario funcionario)
     {
         using var command = commandFactory.Create("UPDATE Funcionarios SET Id_Cargo = @Id_Cargo, Id_Usuario = @Id_Usuario, Salario = @Salario WHERE Id = @Id");
         command.AddParameter("@Id", funcionario.Id);
@@ -60,7 +60,7 @@ public class FuncionarioRepository : IFuncionarioRepository
         command.AddParameter("@Salario", funcionario.Salario);
         command.ExecuteNonQuery();
 
-        pessoaFisicaRepository.Update(funcionario);
+        return (Funcionario)pessoaFisicaRepository.Update(funcionario);
     }
 
     public void Delete(Funcionario funcionario)

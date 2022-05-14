@@ -10,9 +10,9 @@ public interface IUsuarioRepository
 
     IEnumerable<Usuario> Get();
 
-    void Update(Usuario usuario);
+    Usuario Update(Usuario usuario);
 
-    void UpdatePassword(Usuario usuario, string password);
+    Usuario UpdatePassword(Usuario usuario, string password);
 
     void Delete(Usuario usuario);
 }

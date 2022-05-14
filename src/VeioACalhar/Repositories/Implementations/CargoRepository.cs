@@ -42,13 +42,15 @@ public class CargoRepository : ICargoRepository
             yield return CreateCargo(reader);
     }
 
-    public void Update(Cargo cargo)
+    public Cargo Update(Cargo cargo)
     {
         using var command = commandFactory.Create("UPDATE Cargos SET (Nome=@Nome) WHERE Id=@Id");
         command.AddParameter("@Id", cargo.Id);
         command.AddParameter("@Nome", cargo.Nome);
 
         command.ExecuteNonQuery();
+
+        return cargo;
     }
 
     public void Delete(Cargo cargo)

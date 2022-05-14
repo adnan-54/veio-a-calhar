@@ -10,7 +10,7 @@ public interface ICargoRepository
 
     IEnumerable<Cargo> Get();
 
-    public void Update(Cargo cargo);
+    Cargo Update(Cargo cargo);
 
-    public void Delete(Cargo cargo);
+    void Delete(Cargo cargo);
 }

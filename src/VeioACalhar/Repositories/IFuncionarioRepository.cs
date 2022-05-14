@@ -10,7 +10,7 @@ public interface IFuncionarioRepository
 
     IEnumerable<Funcionario> Get();
 
-    void Update(Funcionario funcionario);
+    Funcionario Update(Funcionario funcionario);
 
     void Delete(Funcionario funcionario);
 }

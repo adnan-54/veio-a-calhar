@@ -12,28 +12,10 @@ public class EnderecoRepository : IEnderecoRepository
         this.commandFactory = commandFactory;
     }
 
-    public Endereco Create(Endereco endereco)
+    public IEnumerable<Endereco> CreateFrom(Pessoa pessoa)
     {
-        using var command = commandFactory.Create("INSERT INTO Pessoas_Enderecos(Id_Pessoa, Logradouro, Numero, Bairro, Cidade, Estado, CEP, Observacoes) OUTPUT INSERTED.Id VALUES (@Id_Pessoa, @Logradouro, @Numero, @Bairro, @Cidade, @Estado, @CEP, @Observacoes)");
-        command.AddParameter("@Id_Pessoa", endereco.Pessoa.Id);
-        command.AddParameter("@Logradouro", endereco.Logradouro);
-        command.AddParameter("@Numero", endereco.Numero);
-        command.AddParameter("@Bairro", endereco.Bairro);
-        command.AddParameter("@Cidade", endereco.Cidade);
-        command.AddParameter("@Estado", endereco.Estado);
-        command.AddParameter("@CEP", endereco.Cep);
-        command.AddParameter("@Observacoes", endereco.Observacoes);
-
-        var id = (int)command.ExecuteScalar()!;
-
-        return endereco with { Id = id };
-    }
-
-    public void Delete(Endereco endereco)
-    {
-        using var command = commandFactory.Create("DELETE FROM Pessoas_Enderecos WHERE Id = @Id");
-        command.AddParameter("@Id", endereco.Id);
-        command.ExecuteNonQuery();
+        foreach (var endereco in pessoa.Enderecos)
+            yield return Create(endereco, pessoa);
     }
 
     public IEnumerable<Endereco> GetFrom(Pessoa pessoa)
@@ -58,10 +40,10 @@ public class EnderecoRepository : IEnderecoRepository
         }
     }
 
-    public void UpdateFrom(Pessoa pessoa)
+    public IEnumerable<Endereco> UpdateFrom(Pessoa pessoa)
     {
         DeleteFrom(pessoa);
-        CreateFrom(pessoa);
+        return CreateFrom(pessoa);
     }
 
     public void DeleteFrom(Pessoa pessoa)
@@ -71,9 +53,20 @@ public class EnderecoRepository : IEnderecoRepository
         command.ExecuteNonQuery();
     }
 
-    public void CreateFrom(Pessoa pessoa)
+    private Endereco Create(Endereco endereco, Pessoa pessoa)
     {
-        foreach (var endereco in pessoa.Enderecos)
-            Create(endereco);
+        using var command = commandFactory.Create("INSERT INTO Pessoas_Enderecos(Id_Pessoa, Logradouro, Numero, Bairro, Cidade, Estado, CEP, Observacoes) OUTPUT INSERTED.Id VALUES (@Id_Pessoa, @Logradouro, @Numero, @Bairro, @Cidade, @Estado, @CEP, @Observacoes)");
+        command.AddParameter("@Id_Pessoa", pessoa.Id);
+        command.AddParameter("@Logradouro", endereco.Logradouro);
+        command.AddParameter("@Numero", endereco.Numero);
+        command.AddParameter("@Bairro", endereco.Bairro);
+        command.AddParameter("@Cidade", endereco.Cidade);
+        command.AddParameter("@Estado", endereco.Estado);
+        command.AddParameter("@CEP", endereco.Cep);
+        command.AddParameter("@Observacoes", endereco.Observacoes);
+
+        var id = (int)command.ExecuteScalar()!;
+
+        return endereco with { Id = id, Pessoa = pessoa };
     }
 }

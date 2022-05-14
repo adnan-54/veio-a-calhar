@@ -10,7 +10,7 @@ public interface IPessoaRepository
 
     IEnumerable<Pessoa> Get();
 
-    public void Update(Pessoa pessoa);
+    Pessoa Update(Pessoa pessoa);
 
-    public void Delete(Pessoa pessoa);
+    void Delete(Pessoa pessoa);
 }

@@ -17,14 +17,14 @@ public class PessoaJuridicaRepository : IPessoaJuridicaRepository
 
     public PessoaJuridica Create(PessoaJuridica pessoaJuridica)
     {
-        var pessoa = pessoaRepository.Create(pessoaJuridica);
+        pessoaJuridica = (PessoaJuridica)pessoaRepository.Create(pessoaJuridica);
         using var command = commandFactory.Create("INSERT INTO Pessoas_Juridicas(Id, CNPJ, Inscricao_Estadual) VALUES (@Id, @CNPJ, @Inscricao_Estadual)");
-        command.AddParameter("@Id", pessoa.Id);
+        command.AddParameter("@Id", pessoaJuridica.Id);
         command.AddParameter("@CNPJ", pessoaJuridica.Cnpj);
         command.AddParameter("@Inscricao_Estadual", pessoaJuridica.InscricaoEstadual);
         command.ExecuteNonQuery();
 
-        return pessoaJuridica with { Id = pessoa.Id };
+        return pessoaJuridica;
     }
 
     public PessoaJuridica Get(int id)
@@ -47,7 +47,7 @@ public class PessoaJuridicaRepository : IPessoaJuridicaRepository
             yield return CreatePessoaJuridica(reader);
     }
 
-    public void Update(PessoaJuridica pessoaJuridica)
+    public PessoaJuridica Update(PessoaJuridica pessoaJuridica)
     {
         using var command = commandFactory.Create("UPDATE Pessoas_Juridicas SET CNPJ = @CNPJ, Inscricao_Estadual = @Inscricao_Estadual WHERE Id = @Id");
         command.AddParameter("@Id", pessoaJuridica.Id);
@@ -55,7 +55,7 @@ public class PessoaJuridicaRepository : IPessoaJuridicaRepository
         command.AddParameter("@Inscricao_Estadual", pessoaJuridica.InscricaoEstadual);
         command.ExecuteNonQuery();
 
-        pessoaRepository.Update(pessoaJuridica);
+        return (PessoaJuridica)pessoaRepository.Update(pessoaJuridica);
     }
 
     public void Delete(PessoaJuridica pessoaJuridica)
