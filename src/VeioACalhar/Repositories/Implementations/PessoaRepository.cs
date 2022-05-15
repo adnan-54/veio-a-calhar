@@ -4,7 +4,7 @@ using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
-public class PessoaRepository : IPessoaRepository
+public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPessoa : Pessoa, new()
 {
     private readonly ISqlCommandFactory commandFactory;
     private readonly ITelefoneRepository telefoneRepository;
@@ -17,27 +17,29 @@ public class PessoaRepository : IPessoaRepository
         this.enderecoRepository = enderecoRepository;
     }
 
-    public Pessoa Create(Pessoa pessoa)
+    public TPessoa Create(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, PIX, Email) OUTPUT INSERTED.Id VALUES (@Nome, @Observacoes, @PIX, @Email)");
+        using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, Pix, Email) OUTPUT INSERTED.ID VALUES(@Nome, @Observacoes, @Pix, @Email)");
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
-        command.AddParameter("@PIX", pessoa.Pix);
+        command.AddParameter("@Pix", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
 
-        var id = (int)command.ExecuteScalar()!;
+        var id = command.ExecuteNonQuery();
+        
         pessoa = pessoa with { Id = id };
 
-        var telefones = telefoneRepository.CreateFrom(pessoa);
-        var enderecos = enderecoRepository.CreateFrom(pessoa);
+        var telefones = telefoneRepository.CreateFor(pessoa);
+        var enderecos = enderecoRepository.CreateFor(pessoa);
 
         return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 
-    public Pessoa Get(int id)
+    public TPessoa Get(int id)
     {
-        using var command = commandFactory.Create("SELECT * FROM Pessoas WHERE Id=@Id");
+        using var command = commandFactory.Create("SELECT * FROM Pessoas WHERE Id = @Id");
         command.AddParameter("@Id", id);
+
         using var reader = command.ExecuteReader();
 
         if (reader.Read())
@@ -45,7 +47,7 @@ public class PessoaRepository : IPessoaRepository
         return new();
     }
 
-    public IEnumerable<Pessoa> Get()
+    public IEnumerable<TPessoa> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas");
         using var reader = command.ExecuteReader();
@@ -54,46 +56,48 @@ public class PessoaRepository : IPessoaRepository
             yield return CreatePessoa(reader);
     }
 
-    public Pessoa Update(Pessoa pessoa)
+    public TPessoa Update(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("UPDATE Pessoas SET Nome=@Nome, Observacoes=@Observacoes, PIX=@PIX, Email=@Email WHERE Id=@Id");
+        using var command = commandFactory.Create("UPDATE Pessoas SET Nome = @Nome, Observacoes = @Observacoes, Pix = @Pix, Email = @Email WHERE Id = @Id");
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
-        command.AddParameter("@PIX", pessoa.Pix);
+        command.AddParameter("@Pix", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
         command.AddParameter("@Id", pessoa.Id);
+
         command.ExecuteNonQuery();
 
-        var telefones = telefoneRepository.UpdateFrom(pessoa);
-        var enderecos = enderecoRepository.UpdateFrom(pessoa);
+        var telefones = telefoneRepository.UpdateFor(pessoa);
+        var enderecos = enderecoRepository.UpdateFor(pessoa);
 
         return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 
-    public void Delete(Pessoa pessoa)
+    public void Delete(TPessoa pessoa)
     {
-        telefoneRepository.DeleteFrom(pessoa);
-        enderecoRepository.DeleteFrom(pessoa);
+        telefoneRepository.DeleteFor(pessoa);
+        enderecoRepository.DeleteFor(pessoa);
 
-        using var command = commandFactory.Create("DELETE FROM Pessoas WHERE Id=@Id");
+        using var command = commandFactory.Create("DELETE FROM Pessoas WHERE Id = @Id");
         command.AddParameter("@Id", pessoa.Id);
+
         command.ExecuteNonQuery();
     }
 
-    private Pessoa CreatePessoa(SqlDataReader reader)
+    private TPessoa CreatePessoa(SqlDataReader reader)
     {
-        var pessoa = new Pessoa()
+        var pessoa = new TPessoa()
         {
             Id = (int)reader["Id"],
             Nome = (string)reader["Nome"],
             Observacoes = (string)reader["Observacoes"],
-            Pix = (string)reader["PIX"],
-            Email = (string)reader["Email"],
+            Pix = (string)reader["Pix"],
+            Email = (string)reader["Email"]
         };
+        
+        var telefones = telefoneRepository.GetFor(pessoa);
+        var enderecos = enderecoRepository.GetFor(pessoa);
 
-        var telefones = telefoneRepository.GetFrom(pessoa);
-        var enderecos = enderecoRepository.GetFrom(pessoa);
-
-        return pessoa with { Telefones = telefones, Enderecos = enderecos };
+        return pessoa with { Telefones = telefones, Enderecos = enderecos };        
     }
 }

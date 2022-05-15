@@ -4,11 +4,11 @@ namespace VeioACalhar.Repositories;
 
 public interface ITelefoneRepository
 {
-    IEnumerable<Telefone> CreateFrom(Pessoa pessoa);
+    IEnumerable<Telefone> CreateFor(Pessoa pessoa);
 
-    IEnumerable<Telefone> GetFrom(Pessoa pessoa);
+    IEnumerable<Telefone> GetFor(Pessoa pessoa);
 
-    IEnumerable<Telefone> UpdateFrom(Pessoa pessoa);
+    IEnumerable<Telefone> UpdateFor(Pessoa pessoa);
 
-    void DeleteFrom(Pessoa pessoa);
+    void DeleteFor(Pessoa pessoa);
 }

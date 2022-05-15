@@ -7,7 +7,7 @@ CREATE TABLE Pessoas(
     Id INT PRIMARY KEY IDENTITY,
     Nome VARCHAR(32) NOT NULL,
     Observacoes VARCHAR(MAX),
-	PIX VARCHAR(64),
+	Pix VARCHAR(64),
 	Email VARCHAR(64),
 )
 

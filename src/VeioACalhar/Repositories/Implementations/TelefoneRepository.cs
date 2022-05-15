@@ -12,51 +12,34 @@ public class TelefoneRepository : ITelefoneRepository
         this.commandFactory = commandFactory;
     }
 
-    public IEnumerable<Telefone> CreateFrom(Pessoa pessoa)
+    public IEnumerable<Telefone> CreateFor(Pessoa pessoa)
     {
         foreach (var telefone in pessoa.Telefones)
             yield return Create(telefone, pessoa);
     }
 
-    public IEnumerable<Telefone> GetFrom(Pessoa pessoa)
+    public IEnumerable<Telefone> GetFor(Pessoa pessoa)
     {
-        using var command = commandFactory.Create("SELECT * FROM Pessoas_Telefones WHERE Id_Pessoa=@Id_Pessoa");
-        command.AddParameter("@Id_Pessoa", pessoa.Id);
-        using var reader = command.ExecuteReader();
-
-        while (reader.Read())
-        {
-            yield return new()
-            {
-                Id = (int)reader["Id"],
-                Pessoa = pessoa,
-                Numero = (string)reader["Numero"],
-                Observacoes = (string)reader["Observacoes"]
-            };
-        }
+        throw new NotImplementedException();
     }
 
-    public IEnumerable<Telefone> UpdateFrom(Pessoa pessoa)
+    public IEnumerable<Telefone> UpdateFor(Pessoa pessoa)
     {
-        DeleteFrom(pessoa);
-        return CreateFrom(pessoa);
+        throw new NotImplementedException();
     }
 
-    public void DeleteFrom(Pessoa pessoa)
+    public void DeleteFor(Pessoa pessoa)
     {
-        using var command = commandFactory.Create("DELETE FROM Pessoas_Telefones WHERE Id_Pessoa=@Id_Pessoa");
-        command.AddParameter("@Id_Pessoa", pessoa.Id);
-        command.ExecuteNonQuery();
+        throw new NotImplementedException();
     }
 
     private Telefone Create(Telefone telefone, Pessoa pessoa)
     {
-        using var command = commandFactory.Create("INSERT INTO Pessoas_Telefones(Id_Pessoa, Numero, Observacoes) OUTPUT INSERTED.Id VALUES (@Id_Pessoa, @Numero, @Observacoes)");
+        using var command = commandFactory.Create("INSERT INTO Pessoas_Telefones(Id_Pessoa, Numero) OUTPUT INSERTED.Id VALUES (@Id_Pessoa, @Numero)");
         command.AddParameter("@Id_Pessoa", pessoa.Id);
         command.AddParameter("@Numero", telefone.Numero);
-        command.AddParameter("@Observacoes", telefone.Observacoes);
 
-        var id = (int)command.ExecuteScalar()!;
+        var id = command.ExecuteNonQuery();
 
         return telefone with { Id = id, Pessoa = pessoa };
     }
