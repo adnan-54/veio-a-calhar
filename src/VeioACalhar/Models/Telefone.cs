@@ -4,7 +4,7 @@ public record Telefone : Entidade
 {
     public Telefone()
     {
-        Pessoa = new();
+        Pessoa = new PessoaPadrao();
         Numero = string.Empty;
         Observacoes = string.Empty;
     }

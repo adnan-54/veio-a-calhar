@@ -19,7 +19,7 @@ CREATE TABLE Pessoas_Enderecos(
     Bairro VARCHAR(32) NOT NULL,
     Cidade VARCHAR(16) NOT NULL,
     Estado VARCHAR(16) NOT NULL,
-    CEP VARCHAR(9),
+    Cep VARCHAR(9),
     Observacoes VARCHAR(1024)
 )
 
@@ -34,13 +34,13 @@ CREATE TABLE Pessoas_Juridicas(
     Id INT PRIMARY KEY REFERENCES Pessoas(Id),
     Nome_Fantasia VARCHAR(64),
     Inscricao_Estadual VARCHAR(14),
-    CNPJ VARCHAR(14)
+    Cnpj VARCHAR(14)
 )
 
 CREATE TABLE Pessoas_Fisicas(
     Id INT PRIMARY KEY REFERENCES Pessoas(Id),
-    CPF VARCHAR(11),
-    RG VARCHAR(12)
+    Cpf VARCHAR(11),
+    Rg VARCHAR(12)
 )
 
 CREATE TABLE Clientes_Juridicos(
@@ -53,7 +53,7 @@ CREATE TABLE Clientes_Fisicos(
 
 CREATE TABLE Usuarios(
     Id INT PRIMARY KEY IDENTITY,
-    Login VARCHAR(50) NOT NULL,
+    [Login] VARCHAR(50) NOT NULL,
 	Senha VARCHAR(1024) NOT NULL,
 	Data_Cadastro DATETIME NOT NULL,
 	Ativo BIT NOT NULL

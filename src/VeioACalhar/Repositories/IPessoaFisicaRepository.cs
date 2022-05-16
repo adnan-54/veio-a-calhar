@@ -2,7 +2,7 @@
 
 namespace VeioACalhar.Repositories;
 
-public interface IPessoaRepository<TPessoa> where TPessoa : Pessoa, new()
+public interface IPessoaFisicaRepository<TPessoa> where TPessoa : PessoaFisica, new()
 {
     TPessoa Create(TPessoa pessoa);
 

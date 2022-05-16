@@ -4,7 +4,7 @@ public record Endereco : Entidade
 {
     public Endereco()
     {
-        Pessoa = new();
+        Pessoa = new PessoaPadrao();
         Logradouro = string.Empty;
         Bairro = string.Empty;
         Cidade = string.Empty;
