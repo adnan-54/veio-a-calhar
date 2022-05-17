@@ -18,7 +18,7 @@ public class PessoaFisicaRepository<TPessoa> : IPessoaFisicaRepository<TPessoa> 
     public TPessoa Create(TPessoa pessoa)
     {
         pessoa = pessoaRepository.Create(pessoa);
-        using var command = commandFactory.Create("INSERT INTO Pessoas_Fisicas(Id, Cpf, Rg) OUTPUT INSERTED.Id VALUES(@Id, @Cpf, @Rg)");
+        using var command = commandFactory.Create("INSERT INTO Pessoas_Fisicas(Id, Cpf, Rg) VALUES(@Id, @Cpf, @Rg)");
         command.AddParameter("@Id", pessoa.Id);
         command.AddParameter("@Cpf", pessoa.Cpf);
         command.AddParameter("@Rg", pessoa.Rg);

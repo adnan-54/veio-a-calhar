@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using VeioACalhar.Models;
+﻿using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 

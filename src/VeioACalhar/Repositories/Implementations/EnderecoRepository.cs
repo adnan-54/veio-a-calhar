@@ -61,7 +61,7 @@ public class EnderecoRepository : IEnderecoRepository
         command.AddParameter("@Cep", endereco.Cep);
         command.AddParameter("@Observacoes", endereco.Observacoes);
 
-        var id = command.ExecuteNonQuery();
+        var id = command.ExecuteScalar<int>();
 
         return endereco with { Id = id, Pessoa = pessoa };
     }

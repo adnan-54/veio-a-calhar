@@ -19,13 +19,13 @@ public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPesso
 
     public TPessoa Create(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, Pix, Email) OUTPUT INSERTED.ID VALUES(@Nome, @Observacoes, @Pix, @Email)");
+        using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, Pix, Email) OUTPUT INSERTED.Id VALUES(@Nome, @Observacoes, @Pix, @Email)");
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
         command.AddParameter("@Pix", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
 
-        var id = command.ExecuteNonQuery();
+        var id = command.ExecuteScalar<int>();
 
         pessoa = pessoa with { Id = id };
 

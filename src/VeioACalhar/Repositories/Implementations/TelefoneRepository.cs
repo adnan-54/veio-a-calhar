@@ -56,7 +56,7 @@ public class TelefoneRepository : ITelefoneRepository
         command.AddParameter("@Numero", telefone.Numero);
         command.AddParameter("@Observacoes", telefone.Observacoes);
 
-        var id = command.ExecuteNonQuery();
+        var id = command.ExecuteScalar<int>();
 
         return telefone with { Id = id, Pessoa = pessoa };
     }
