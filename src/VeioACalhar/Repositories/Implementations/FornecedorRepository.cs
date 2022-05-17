@@ -2,6 +2,7 @@
 
 namespace VeioACalhar.Repositories;
 
+//todo: fazer sql para esse repositorio
 public class FornecedorRepository : IFornecedorRepository
 {
     private readonly IPessoaJuridicaRepository<Fornecedor> pessoaRepository;
@@ -21,7 +22,7 @@ public class FornecedorRepository : IFornecedorRepository
         return pessoaRepository.Get(id);
     }
 
-    public IEnumerable<Fornecedor> GetAll()
+    public IReadOnlyCollection<Fornecedor> GetAll()
     {
         return pessoaRepository.GetAll();
     }

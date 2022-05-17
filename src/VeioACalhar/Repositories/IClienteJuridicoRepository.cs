@@ -8,7 +8,7 @@ public interface IClienteJuridicoRepository
 
     ClienteJuridico Get(int id);
 
-    IEnumerable<ClienteJuridico> GetAll();
+    IReadOnlyCollection<ClienteJuridico> GetAll();
 
     ClienteJuridico Update(ClienteJuridico cliente);
 

@@ -13,24 +13,30 @@ public class EnderecoRepository : IEnderecoRepository
         this.commandFactory = commandFactory;
     }
 
-    public IEnumerable<Endereco> CreateFor(Pessoa pessoa)
+    public IReadOnlyCollection<Endereco> CreateFor(Pessoa pessoa)
     {
+        var enderecos = new List<Endereco>();
         foreach (var endereco in pessoa.Enderecos)
-            yield return Create(endereco, pessoa);
+            enderecos.Add(Create(endereco, pessoa));
+
+        return enderecos;
     }
 
-    public IEnumerable<Endereco> GetFor(Pessoa pessoa)
+    public IReadOnlyCollection<Endereco> GetFor(Pessoa pessoa)
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Enderecos WHERE Id_Pessoa = @Id_Pessoa");
         command.AddParameter("@Id_Pessoa", pessoa.Id);
 
         using var reader = command.ExecuteReader();
 
+        var enderecos = new List<Endereco>();
         while (reader.Read())
-            yield return CreateEndereco(reader, pessoa);
+            enderecos.Add(CreateEndereco(reader, pessoa));
+
+        return enderecos;
     }
 
-    public IEnumerable<Endereco> UpdateFor(Pessoa pessoa)
+    public IReadOnlyCollection<Endereco> UpdateFor(Pessoa pessoa)
     {
         DeleteFor(pessoa);
         return CreateFor(pessoa);

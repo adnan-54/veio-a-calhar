@@ -13,24 +13,30 @@ public class TelefoneRepository : ITelefoneRepository
         this.commandFactory = commandFactory;
     }
 
-    public IEnumerable<Telefone> CreateFor(Pessoa pessoa)
+    public IReadOnlyCollection<Telefone> CreateFor(Pessoa pessoa)
     {
+        var telefones = new List<Telefone>();
         foreach (var telefone in pessoa.Telefones)
-            yield return Create(telefone, pessoa);
+            telefones.Add(Create(telefone, pessoa));
+        return telefones;
     }
 
-    public IEnumerable<Telefone> GetFor(Pessoa pessoa)
+    public IReadOnlyCollection<Telefone> GetFor(Pessoa pessoa)
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Telefones WHERE Id_Pessoa = @Id_Pessoa");
         command.AddParameter("@Id_Pessoa", pessoa.Id);
 
         using var reader = command.ExecuteReader();
 
+        var telefones = new List<Telefone>();
+
         while (reader.Read())
-            yield return CreateTelefone(reader, pessoa);
+            telefones.Add(CreateTelefone(reader, pessoa));
+
+        return telefones;
     }
 
-    public IEnumerable<Telefone> UpdateFor(Pessoa pessoa)
+    public IReadOnlyCollection<Telefone> UpdateFor(Pessoa pessoa)
     {
         DeleteFor(pessoa);
         return CreateFor(pessoa);

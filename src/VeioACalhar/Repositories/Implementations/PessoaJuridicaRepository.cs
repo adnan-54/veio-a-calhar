@@ -43,12 +43,16 @@ public class PessoaJuridicaRepository<TPessoa> : IPessoaJuridicaRepository<TPess
 
     }
 
-    public IEnumerable<TPessoa> GetAll()
+    public IReadOnlyCollection<TPessoa> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Juridicas");
         using var reader = command.ExecuteReader();
+
+        var pessoas = new List<TPessoa>();
         while (reader.Read())
-            yield return CreatePessoa(reader);
+            pessoas.Add(CreatePessoa(reader));
+
+        return pessoas;
     }
 
     public TPessoa Update(TPessoa pessoa)

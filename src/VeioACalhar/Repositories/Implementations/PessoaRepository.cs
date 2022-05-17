@@ -26,7 +26,7 @@ public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPesso
         command.AddParameter("@Email", pessoa.Email);
 
         var id = command.ExecuteNonQuery();
-        
+
         pessoa = pessoa with { Id = id };
 
         var telefones = telefoneRepository.CreateFor(pessoa);
@@ -47,13 +47,16 @@ public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPesso
         return new();
     }
 
-    public IEnumerable<TPessoa> GetAll()
+    public IReadOnlyCollection<TPessoa> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas");
         using var reader = command.ExecuteReader();
 
+        var pessoas = new List<TPessoa>();
         while (reader.Read())
-            yield return CreatePessoa(reader);
+            pessoas.Add(CreatePessoa(reader));
+
+        return pessoas;
     }
 
     public TPessoa Update(TPessoa pessoa)
@@ -94,10 +97,10 @@ public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPesso
             Pix = (string)reader["Pix"],
             Email = (string)reader["Email"]
         };
-        
+
         var telefones = telefoneRepository.GetFor(pessoa);
         var enderecos = enderecoRepository.GetFor(pessoa);
 
-        return pessoa with { Telefones = telefones, Enderecos = enderecos };        
+        return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 }

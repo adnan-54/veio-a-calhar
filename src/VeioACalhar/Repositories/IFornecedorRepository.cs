@@ -8,7 +8,7 @@ public interface IFornecedorRepository
 
     Fornecedor Get(int id);
 
-    IEnumerable<Fornecedor> GetAll();
+    IReadOnlyCollection<Fornecedor> GetAll();
 
     Fornecedor Update(Fornecedor fornecedor);
 

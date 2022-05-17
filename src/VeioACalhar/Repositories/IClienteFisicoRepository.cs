@@ -8,7 +8,7 @@ public interface IClienteFisicoRepository
 
     ClienteFisico Get(int id);
 
-    IEnumerable<ClienteFisico> GetAll();
+    IReadOnlyCollection<ClienteFisico> GetAll();
 
     ClienteFisico Update(ClienteFisico cliente);
 

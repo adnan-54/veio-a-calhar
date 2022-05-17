@@ -8,7 +8,7 @@ public interface IPessoaRepository<TPessoa> where TPessoa : Pessoa, new()
 
     TPessoa Get(int id);
 
-    IEnumerable<TPessoa> GetAll();
+    IReadOnlyCollection<TPessoa> GetAll();
 
     TPessoa Update(TPessoa pessoa);
 

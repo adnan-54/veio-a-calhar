@@ -4,11 +4,11 @@ namespace VeioACalhar.Repositories;
 
 public interface IEnderecoRepository
 {
-    IEnumerable<Endereco> CreateFor(Pessoa pessoa);
+    IReadOnlyCollection<Endereco> CreateFor(Pessoa pessoa);
 
-    IEnumerable<Endereco> GetFor(Pessoa pessoa);
+    IReadOnlyCollection<Endereco> GetFor(Pessoa pessoa);
 
-    IEnumerable<Endereco> UpdateFor(Pessoa pessoa);
+    IReadOnlyCollection<Endereco> UpdateFor(Pessoa pessoa);
 
     void DeleteFor(Pessoa pessoa);
 }
