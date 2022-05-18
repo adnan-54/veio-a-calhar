@@ -9,7 +9,7 @@
 <h1>Clientes</h1>
 
 <p>
-    <a href="/Cliente/Create">Criar Novo</a>
+    @Html.ActionLink("Criar Novo", "Create")
 </p>
 
 <table class="table">
@@ -50,9 +50,9 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Detalhes", "Details", item) |
+                    @Html.ActionLink("Editar", "Edit", item) |
+                    @Html.ActionLink("Deletar", "Delete", item)
                 </td>
             </tr>
         }

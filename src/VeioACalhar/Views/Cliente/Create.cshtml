@@ -6,7 +6,9 @@
 }
 
 <h1>Novo Cliente</h1>
+
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form action="/Cliente/Create" method="POST">
@@ -26,18 +28,39 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label">Observacoes</label>
+                <label class="control-label">Observações</label>
                 <textarea name="Observacoes" class="form-control"></textarea>
             </div>
 
-            <div class="form-group">
-                <label class="control-label">CPF</label>
-                <input name="Cpf" class="form-control" />
-            </div>
+            <button class="btn">Pessoa Fisica</button>
 
-            <div class="form-group">
-                <label class="control-label">Rg</label>
-                <input name="RG" class="form-control" />
+            <div>
+                <div class="form-group">
+                    <label class="control-label">CPF</label>
+                    <input name="Cpf" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">RG</label>
+                    <input name="Rg" class="form-control" />
+                </div>
+            </div>
+            
+            <div>
+               <div class="form-group">
+                    <label class="control-label">Nome Fantasia</label>
+                    <input name="NomeFantasia" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Inscricao Estadual</label>
+                    <input name="InscricaoEstadual" class="form-control" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">CNPJ</label>
+                    <input name="Cnpj" class="form-control" />
+                </div>
             </div>
 
             <div class="form-group">
