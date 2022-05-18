@@ -87,10 +87,9 @@ public class ProdutoRepository : IProdutoRepository
             Unidade = unidadeRepository.Get(reader.GetInt32(2)),
             Nome = reader.GetString(3),
             Descricao = reader.GetString(4),
-            PrecoCusto = reader.GetDecimal(5),
-            PrecoVenda = reader.GetDecimal(6),
+            PrecoCusto = reader.GetSqlMoney(5).Value,
+            PrecoVenda = reader.GetSqlMoney(6).Value,
             Quantidade = reader.GetDecimal(7)
         };
     }
-}
 }

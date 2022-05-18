@@ -4,8 +4,8 @@ public record Pagamento : Entidade
 {
     public Pagamento()
     {
-        Pagador = new PessoaPadrao();
-        Favorecido = new PessoaPadrao();
+        Pagador = new PessoaGenerica();
+        Favorecido = new PessoaGenerica();
         FormaPagamento = new();
         Parcelas = Enumerable.Empty<Parcela>();
     }

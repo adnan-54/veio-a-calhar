@@ -95,8 +95,8 @@ CREATE TABLE Produtos(
     Id_Unidade INT FOREIGN KEY REFERENCES Unidades(Id),
     Nome VARCHAR(32) NOT NULL,
     Descricao VARCHAR(MAX) NOT NULL,
-    Preco_Custo INT NOT NULL,
-    Preco_Venda INT NOT NULL,
+    Preco_Custo MONEY NOT NULL,
+    Preco_Venda MONEY NOT NULL,
     Quantidade DECIMAL(8, 2) NOT NULL
 )
 
@@ -123,10 +123,9 @@ CREATE TABLE Parcelas(
     Id INT PRIMARY KEY IDENTITY,
 	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
 	Numero INT NOT NULL,
-	Valor INT NOT NULL,
-	Porcentagem_Desconto DECIMAL(3, 2) NOT NULL,
-	Valor_Desconto INT NOT NULL,
-	Valor_Pago INT,
+	Valor MONEY NOT NULL,
+	Porcentagem_Desconto INT NOT NULL,
+	Valor_Pago MONEY,
 	Data_Vencimento DATE NOT NULL,
 	Data_Pagamento DATE
 )

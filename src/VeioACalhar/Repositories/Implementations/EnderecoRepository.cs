@@ -31,7 +31,7 @@ public class EnderecoRepository : IEnderecoRepository
 
         var enderecos = new List<Endereco>();
         while (reader.Read())
-            enderecos.Add(CreateEndereco(reader, pessoa));
+            enderecos.Add(CreateEndereco(reader));
 
         return enderecos;
     }
@@ -63,10 +63,10 @@ public class EnderecoRepository : IEnderecoRepository
 
         var id = command.ExecuteScalar<int>();
 
-        return endereco with { Id = id, Pessoa = pessoa };
+        return endereco with { Id = id };
     }
 
-    private static Endereco CreateEndereco(SqlDataReader reader, Pessoa pessoa)
+    private static Endereco CreateEndereco(SqlDataReader reader)
     {
         return new()
         {
@@ -78,7 +78,6 @@ public class EnderecoRepository : IEnderecoRepository
             Estado = (string)reader["Estado"],
             Cep = (string)reader["Cep"],
             Observacoes = (string)reader["Observacoes"],
-            Pessoa = pessoa
         };
     }
 }

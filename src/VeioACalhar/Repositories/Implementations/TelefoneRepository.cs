@@ -31,7 +31,7 @@ public class TelefoneRepository : ITelefoneRepository
         var telefones = new List<Telefone>();
 
         while (reader.Read())
-            telefones.Add(CreateTelefone(reader, pessoa));
+            telefones.Add(CreateTelefone(reader));
 
         return telefones;
     }
@@ -58,17 +58,16 @@ public class TelefoneRepository : ITelefoneRepository
 
         var id = command.ExecuteScalar<int>();
 
-        return telefone with { Id = id, Pessoa = pessoa };
+        return telefone with { Id = id };
     }
 
-    private static Telefone CreateTelefone(SqlDataReader reader, Pessoa pessoa)
+    private static Telefone CreateTelefone(SqlDataReader reader)
     {
         return new()
         {
             Id = (int)reader["Id"],
             Numero = (string)reader["Numero"],
             Observacoes = (string)reader["Observacoes"],
-            Pessoa = pessoa
         };
     }
 }
