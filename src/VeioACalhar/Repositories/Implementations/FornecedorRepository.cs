@@ -3,7 +3,6 @@ using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
-//todo: fazer sql para esse repositorio
 public class FornecedorRepository : IFornecedorRepository
 {
     private readonly ISqlCommandFactory commandFactory;

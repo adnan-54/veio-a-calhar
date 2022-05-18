@@ -3,7 +3,6 @@ using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
-//todo: fazer sql para esse repositorio
 public class ClienteFisicoRepository : IClienteFisicoRepository
 {
     private readonly ISqlCommandFactory commandFactory;
@@ -18,7 +17,7 @@ public class ClienteFisicoRepository : IClienteFisicoRepository
     public ClienteFisico Create(ClienteFisico cliente)
     {
         cliente = pessoaRepository.Create(cliente);
-        
+
         using var command = commandFactory.Create("INSERT INTO Clientes_Fisicos(Id) VALUES (@Id)");
         command.AddParameter("@Id", cliente.Id);
         command.ExecuteNonQuery();

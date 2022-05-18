@@ -54,7 +54,7 @@ CREATE TABLE Clientes_Fisicos(
 CREATE TABLE Usuarios(
     Id INT PRIMARY KEY IDENTITY,
     [Login] VARCHAR(50) NOT NULL,
-	Senha VARCHAR(1024) NOT NULL,
+	Senha VARCHAR(2048) NOT NULL,
 	Data_Cadastro DATETIME NOT NULL,
 	Ativo BIT NOT NULL
 )
@@ -92,12 +92,12 @@ INSERT INTO Unidades VALUES ('Metros Quadrados', 'm²')
 CREATE TABLE Produtos(
     Id INT PRIMARY KEY IDENTITY,
     Id_Fornecedor INT FOREIGN KEY REFERENCES Fornecedores(Id),
+    Id_Unidade INT FOREIGN KEY REFERENCES Unidades(Id),
     Nome VARCHAR(32) NOT NULL,
     Descricao VARCHAR(MAX) NOT NULL,
     Preco_Custo INT NOT NULL,
     Preco_Venda INT NOT NULL,
-    Quantidade DECIMAL(8, 2) NOT NULL,
-    Id_Unidade INT FOREIGN KEY REFERENCES Unidades(Id)
+    Quantidade DECIMAL(8, 2) NOT NULL
 )
 
 CREATE TABLE Formas_Pagamento(

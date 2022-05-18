@@ -3,7 +3,6 @@ using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
-//todo: fazer sql para esse repositorio
 public class ClienteJuridicoRepository : IClienteJuridicoRepository
 {
     private readonly ISqlCommandFactory commandFactory;
@@ -18,7 +17,7 @@ public class ClienteJuridicoRepository : IClienteJuridicoRepository
     public ClienteJuridico Create(ClienteJuridico cliente)
     {
         cliente = pessoaRepository.Create(cliente);
-        
+
         using var command = commandFactory.Create("INSERT INTO Clientes_Juridicos(Id) VALUES (@Id)");
         command.AddParameter("@Id", cliente.Id);
         command.ExecuteNonQuery();
@@ -30,8 +29,8 @@ public class ClienteJuridicoRepository : IClienteJuridicoRepository
     {
         using var command = commandFactory.Create("SELECT * FROM Clientes_Juridicos WHERE Id = @Id");
         command.AddParameter("@Id", id);
-        
-        if(command.ExecuteScalar<int>() == id)
+
+        if (command.ExecuteScalar<int>() == id)
             return pessoaRepository.Get(id);
         return new();
     }
