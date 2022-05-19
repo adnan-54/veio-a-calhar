@@ -153,9 +153,8 @@ CREATE TABLE Transacoes_Produtos(
     Id INT PRIMARY KEY IDENTITY,
     Id_Transacoes INT REFERENCES Transacoes(Id),
     Id_Produto INT REFERENCES Produtos(Id),
-    Quantidade INT NOT NULL,
-    Valor_Unitario INT NOT NULL,
-	Valor_Total INT NOT NULL,
+    Quantidade DECIMAL(8, 2) NOT NULL,
+    Valor_Unitario MONEY NOT NULL,
 	Desconto_Unitario INT NOT NULL
 )
 

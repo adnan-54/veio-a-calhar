@@ -27,6 +27,7 @@ builder.Services.AddSingleton<IFormaPagamentoRepository, FormaPagamentoRepositor
 builder.Services.AddSingleton<IParcelaRepository, ParcelaRepository>();
 builder.Services.AddSingleton<IPagamentoRepository, PagamentoRepository>();
 builder.Services.AddSingleton<IStatusTransacaoRepository, StatusTransacaoRepository>();
+builder.Services.AddSingleton<IProdutoTransacaoRepository, ProdutoTransacaoRepository>();
 
 
 var app = builder.Build();

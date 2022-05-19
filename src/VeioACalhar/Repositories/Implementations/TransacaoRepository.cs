@@ -106,19 +106,3 @@ public class TransacaoRepository<TTransacao> : ITransacaoRepository<TTransacao> 
         return transacao with { Produtos = produtos };
     }
 }
-
-public class ProdutoTransacaoRepository : IProdutoTransacaoRepository
-{
-
-}
-
-public interface IProdutoTransacaoRepository
-{
-    IReadOnlyCollection<ProdutoTransacao> CreateFrom(Transacao transacao);
-
-    IReadOnlyCollection<ProdutoTransacao> GetFrom(Transacao transacao);
-
-    IReadOnlyCollection<ProdutoTransacao> UpdateFrom(Transacao transacao);
-
-    void DeleteFrom(Transacao transacao);
-}

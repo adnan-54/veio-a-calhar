@@ -9,7 +9,7 @@ public record ProdutoTransacao : Entidade
 
     public Produto Produto { get; init; }
 
-    public int Quantidade { get; init; }
+    public decimal Quantidade { get; init; }
 
     public decimal ValorUnitario { get; init; }
 
