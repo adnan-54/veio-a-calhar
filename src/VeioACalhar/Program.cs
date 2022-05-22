@@ -28,6 +28,14 @@ builder.Services.AddSingleton<IParcelaRepository, ParcelaRepository>();
 builder.Services.AddSingleton<IPagamentoRepository, PagamentoRepository>();
 builder.Services.AddSingleton<IStatusTransacaoRepository, StatusTransacaoRepository>();
 builder.Services.AddSingleton<IProdutoTransacaoRepository, ProdutoTransacaoRepository>();
+builder.Services.AddSingleton(typeof(ITransacaoRepository<>), typeof(TransacaoRepository<>));
+builder.Services.AddSingleton<IVendaRepository, VendaRepository>();
+builder.Services.AddSingleton<IVendaClienteRepository, VendaClienteRepository>();
+builder.Services.AddSingleton<IVendaFuncionarioRepository, VendaFuncionarioRepository>();
+builder.Services.AddSingleton<ICompraRepository, CompraRepository>();
+
+
+
 
 
 var app = builder.Build();

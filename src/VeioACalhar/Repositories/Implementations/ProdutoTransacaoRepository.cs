@@ -15,7 +15,7 @@ public class ProdutoTransacaoRepository : IProdutoTransacaoRepository
         this.produtoRepository = produtoRepository;
     }
 
-    public IReadOnlyCollection<ProdutoTransacao> CreateFrom(Transacao transacao)
+    public IReadOnlyCollection<ProdutoTransacao> CreateFor(Transacao transacao)
     {
         var produtos = new List<ProdutoTransacao>();
 
@@ -25,7 +25,7 @@ public class ProdutoTransacaoRepository : IProdutoTransacaoRepository
         return produtos;
     }
 
-    public IReadOnlyCollection<ProdutoTransacao> GetFrom(Transacao transacao)
+    public IReadOnlyCollection<ProdutoTransacao> GetFor(Transacao transacao)
     {
         using var command = commandFactory.Create("SELECT * FROM Produtos_Transacoes WHERE Id_Transacao = @Id_Transacao");
         command.AddParameter("@Id_Transacao", transacao.Id);
@@ -39,14 +39,14 @@ public class ProdutoTransacaoRepository : IProdutoTransacaoRepository
         return produtos;
     }
 
-    public IReadOnlyCollection<ProdutoTransacao> UpdateFrom(Transacao transacao)
+    public IReadOnlyCollection<ProdutoTransacao> UpdateFor(Transacao transacao)
     {
 
-        DeleteFrom(transacao);
-        return CreateFrom(transacao);
+        DeleteFor(transacao);
+        return CreateFor(transacao);
     }
 
-    public void DeleteFrom(Transacao transacao)
+    public void DeleteFor(Transacao transacao)
     {
         using var command = commandFactory.Create("DELETE FROM Produtos_Transacoes WHERE Id_Transacao = @Id_Transacao");
         command.AddParameter("@Id_Transacao", transacao.Id);

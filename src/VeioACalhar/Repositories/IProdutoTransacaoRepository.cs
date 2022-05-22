@@ -4,11 +4,11 @@ namespace VeioACalhar.Repositories;
 
 public interface IProdutoTransacaoRepository
 {
-    IReadOnlyCollection<ProdutoTransacao> CreateFrom(Transacao transacao);
+    IReadOnlyCollection<ProdutoTransacao> CreateFor(Transacao transacao);
 
-    IReadOnlyCollection<ProdutoTransacao> GetFrom(Transacao transacao);
+    IReadOnlyCollection<ProdutoTransacao> GetFor(Transacao transacao);
 
-    IReadOnlyCollection<ProdutoTransacao> UpdateFrom(Transacao transacao);
+    IReadOnlyCollection<ProdutoTransacao> UpdateFor(Transacao transacao);
 
-    void DeleteFrom(Transacao transacao);
+    void DeleteFor(Transacao transacao);
 }

@@ -32,7 +32,7 @@ public class TransacaoRepository<TTransacao> : ITransacaoRepository<TTransacao> 
 
         transacao = transacao with { Id = id };
 
-        var produtos = produtoTransacaoRepository.CreateFrom(transacao);
+        var produtos = produtoTransacaoRepository.CreateFor(transacao);
 
         return transacao with { DataCriacao = DateOnly.FromDateTime(DateTime.Today), Produtos = produtos };
 
@@ -74,14 +74,14 @@ public class TransacaoRepository<TTransacao> : ITransacaoRepository<TTransacao> 
 
         command.ExecuteNonQuery();
 
-        var produtos = produtoTransacaoRepository.UpdateFrom(transacao);
+        var produtos = produtoTransacaoRepository.UpdateFor(transacao);
 
         return transacao with { Produtos = produtos };
     }
 
     public void Delete(TTransacao transacao)
     {
-        produtoTransacaoRepository.DeleteFrom(transacao);
+        produtoTransacaoRepository.DeleteFor(transacao);
 
         using var command = commandFactory.Create("DELETE FROM Transacoes WHERE Id = @Id");
         command.AddParameter("@Id", transacao.Id);
@@ -101,7 +101,7 @@ public class TransacaoRepository<TTransacao> : ITransacaoRepository<TTransacao> 
             Observacoes = reader.GetString(5)
         };
 
-        var produtos = produtoTransacaoRepository.GetFrom(transacao);
+        var produtos = produtoTransacaoRepository.GetFor(transacao);
 
         return transacao with { Produtos = produtos };
     }
