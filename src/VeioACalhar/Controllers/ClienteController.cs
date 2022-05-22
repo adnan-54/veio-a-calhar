@@ -26,10 +26,30 @@ public class ClienteController : Controller
     }
 
     [HttpPost]
-    public IActionResult Create(ClienteFisico cliente)
+    public IActionResult Create(Pessoa cliente)
     {
         clienteRepository.Create(cliente);
         return RedirectToAction("Index");
     }
 
+    [HttpGet]
+    public IActionResult Update(int id)
+    {
+        var cliente = clienteRepository.Get(id);
+        return View(cliente);
+    }
+
+    [HttpPut]
+    public IActionResult Update(Pessoa cliente)
+    {
+        clienteRepository.Update(cliente);
+        return RedirectToAction("Index");
+    }
+
+    [HttpDelete]
+    public IActionResult Delete(Pessoa cliente)
+    {
+        clienteRepository.Delete(cliente);
+        return RedirectToAction("Index");
+    }
 }

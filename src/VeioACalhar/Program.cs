@@ -34,10 +34,6 @@ builder.Services.AddSingleton<IVendaClienteRepository, VendaClienteRepository>()
 builder.Services.AddSingleton<IVendaFuncionarioRepository, VendaFuncionarioRepository>();
 builder.Services.AddSingleton<ICompraRepository, CompraRepository>();
 
-
-
-
-
 var app = builder.Build();
 
 app.UseExceptionHandler("/Home/Error");
