@@ -8,9 +8,4 @@ public class LoginController : Controller
     {
         return View();
     }
-
-    public IActionResult SignIn(string userName, string password)
-    {
-        return View();
-    }
 }

@@ -3,64 +3,82 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"]</title>
+    <title>Veio a Calhar - @ViewData["Title"]</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.5/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     <style>
+        .header {
+            background-color: #f1f1f1;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .footer {
+            bottom: 0;
+            position: fixed;
+            width: 100%;
+            text-align: center;
+        }
+
         .vertical-center {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+
+        .menu li a{
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .menu li a:hover {
+            text-decoration: none;
+            background-color: #1f3c58;
+            color: #ffffff;
+        }
     </style>
 
 </head>
 <body>
-    <div class="min-vh-100 d-flex flex-column">
-        <header>
-			<nav class="navbar navbar-expand-lg bg-light">
-                <div class="container-fluid">
-                    <a class="navbar-brand" href="#">Navbar</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="#">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Clientes</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Fornecedores</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Mais...
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                                    <li><a class="dropdown-item" href="#">Funcionários</a></li>
-                                    <li><a class="dropdown-item" href="#">Compras</a></li>
-                                    <li><a class="dropdown-item" href="#">Vendas</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-		</header>
-
-        <div class="flex-grow-1 d-flex container">
-            @RenderBody()
-        </div>
-
-        <footer>
-            <a>footer</a>
-        </footer>
+    <div class="header">
+        <header class="container d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4">
+            <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                    <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+                </svg>
+            </a>
+            <ul class="nav col-12 col-md-6 mb-2 justify-content-center mb-md-0 menu">
+                <li><a class="nav-link px-2 link" href="/">Home</a></li>
+                <li><a class="nav-link px-2 link" href="#">Clientes</a></li>
+                <li><a class="nav-link px-2 link" href="#">Fornecedores</a></li>
+                <li class="dropdown">
+                    <a class="nav-link px-2 link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Mais...
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item nav-link px-2 link" href="#">Funcionários</a></li>
+                        <li><a class="dropdown-item nav-link px-2 link" href="#">Compras</a></li>
+                        <li><a class="dropdown-item nav-link px-2 link" href="#">Vendas</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="col-md-3 text-end">
+                <a type="button" class="btn btn-outline-primary me-2" href="\login">Login</a>
+                <a type="button" class="btn btn-primary" href="\register">Sign-up</a>
+            </div>
+        </header>
+    </div>
+    <div class="flex-grow-1 d-flex">
+        @RenderBody()
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <footer class="container fixed-bottom d-flex flex-wrap align-items-center justify-content-center border-bottom">
+        <p class="text-center text-muted justify-content-center">© 2018 Zero Três Calhas e Rufos, Inc</p>
+    </footer>
 </body>
 </html>
