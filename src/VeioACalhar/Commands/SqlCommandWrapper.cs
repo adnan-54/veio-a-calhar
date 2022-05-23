@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace VeioACalhar.Commands;
 
-public class SqlCommandWrapper : ISqlCommand
+public sealed class SqlCommandWrapper : ISqlCommand
 {
     private readonly SqlConnection connection;
     private readonly SqlCommand command;
@@ -14,10 +14,10 @@ public class SqlCommandWrapper : ISqlCommand
         command = new(query, connection);
     }
 
-    public int ExecuteNonQuery()
+    public void ExecuteNonQuery()
     {
         TryOpenConnection();
-        return command.ExecuteNonQuery();
+        command.ExecuteNonQuery();
     }
 
     public SqlDataReader ExecuteReader()
@@ -30,6 +30,14 @@ public class SqlCommandWrapper : ISqlCommand
     {
         TryOpenConnection();
         return command.ExecuteScalar();
+    }
+
+    public T? ExecuteScalar<T>()
+    {
+        var result = ExecuteScalar();
+        if (result is null)
+            return default;
+        return (T)result;
     }
 
     public void AddParameter(string parameterName, object? value)

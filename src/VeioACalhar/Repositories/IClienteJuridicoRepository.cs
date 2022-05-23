@@ -1,0 +1,16 @@
+﻿using VeioACalhar.Models;
+
+namespace VeioACalhar.Repositories;
+
+public interface IClienteJuridicoRepository
+{
+    ClienteJuridico Create(ClienteJuridico cliente);
+
+    ClienteJuridico Get(int id);
+
+    IReadOnlyCollection<ClienteJuridico> GetAll();
+
+    ClienteJuridico Update(ClienteJuridico cliente);
+
+    void Delete(ClienteJuridico cliente);
+}

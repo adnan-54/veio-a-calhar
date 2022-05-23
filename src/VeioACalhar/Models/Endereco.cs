@@ -4,7 +4,6 @@ public record Endereco : Entidade
 {
     public Endereco()
     {
-        Pessoa = new();
         Logradouro = string.Empty;
         Bairro = string.Empty;
         Cidade = string.Empty;
@@ -12,8 +11,6 @@ public record Endereco : Entidade
         Cep = string.Empty;
         Observacoes = string.Empty;
     }
-
-    public Pessoa Pessoa { get; init; }
 
     public string Logradouro { get; init; }
 

@@ -4,11 +4,13 @@ namespace VeioACalhar.Commands;
 
 public interface ISqlCommand : IDisposable
 {
-    int ExecuteNonQuery();
+    void ExecuteNonQuery();
 
     SqlDataReader ExecuteReader();
 
     object? ExecuteScalar();
+
+    T? ExecuteScalar<T>();
 
     void AddParameter(string parameterName, object? value);
 }

@@ -8,7 +8,7 @@ public interface ICargoRepository
 
     Cargo Get(int id);
 
-    IEnumerable<Cargo> Get();
+    IReadOnlyCollection<Cargo> GetAll();
 
     Cargo Update(Cargo cargo);
 

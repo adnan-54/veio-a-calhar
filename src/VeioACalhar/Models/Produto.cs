@@ -16,9 +16,9 @@ public record Produto : Entidade
 
     public string Descricao { get; init; }
 
-    public decimal Preco_Custo { get; init; }
+    public decimal PrecoCusto { get; init; }
 
-    public decimal Preco_Venda { get; init; }
+    public decimal PrecoVenda { get; init; }
 
     public decimal Quantidade { get; init; }
 

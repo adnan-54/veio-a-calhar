@@ -7,7 +7,7 @@ CREATE TABLE Pessoas(
     Id INT PRIMARY KEY IDENTITY,
     Nome VARCHAR(32) NOT NULL,
     Observacoes VARCHAR(MAX),
-	PIX VARCHAR(64),
+	Pix VARCHAR(64),
 	Email VARCHAR(64),
 )
 
@@ -19,7 +19,7 @@ CREATE TABLE Pessoas_Enderecos(
     Bairro VARCHAR(32) NOT NULL,
     Cidade VARCHAR(16) NOT NULL,
     Estado VARCHAR(16) NOT NULL,
-    CEP VARCHAR(9),
+    Cep VARCHAR(9),
     Observacoes VARCHAR(1024)
 )
 
@@ -34,13 +34,13 @@ CREATE TABLE Pessoas_Juridicas(
     Id INT PRIMARY KEY REFERENCES Pessoas(Id),
     Nome_Fantasia VARCHAR(64),
     Inscricao_Estadual VARCHAR(14),
-    CNPJ VARCHAR(14)
+    Cnpj VARCHAR(14)
 )
 
 CREATE TABLE Pessoas_Fisicas(
     Id INT PRIMARY KEY REFERENCES Pessoas(Id),
-    CPF VARCHAR(11),
-    RG VARCHAR(12)
+    Cpf VARCHAR(11),
+    Rg VARCHAR(12)
 )
 
 CREATE TABLE Clientes_Juridicos(
@@ -53,8 +53,8 @@ CREATE TABLE Clientes_Fisicos(
 
 CREATE TABLE Usuarios(
     Id INT PRIMARY KEY IDENTITY,
-    Login VARCHAR(50) NOT NULL,
-	Senha VARCHAR(1024) NOT NULL,
+    [Login] VARCHAR(50) NOT NULL,
+	Senha VARCHAR(2048) NOT NULL,
 	Data_Cadastro DATETIME NOT NULL,
 	Ativo BIT NOT NULL
 )
@@ -92,12 +92,12 @@ INSERT INTO Unidades VALUES ('Metros Quadrados', 'm²')
 CREATE TABLE Produtos(
     Id INT PRIMARY KEY IDENTITY,
     Id_Fornecedor INT FOREIGN KEY REFERENCES Fornecedores(Id),
+    Id_Unidade INT FOREIGN KEY REFERENCES Unidades(Id),
     Nome VARCHAR(32) NOT NULL,
     Descricao VARCHAR(MAX) NOT NULL,
-    Preco_Custo INT NOT NULL,
-    Preco_Venda INT NOT NULL,
-    Quantidade DECIMAL(8, 2) NOT NULL,
-    Id_Unidade INT FOREIGN KEY REFERENCES Unidades(Id)
+    Preco_Custo MONEY NOT NULL,
+    Preco_Venda MONEY NOT NULL,
+    Quantidade DECIMAL(8, 2) NOT NULL
 )
 
 CREATE TABLE Formas_Pagamento(
@@ -123,10 +123,9 @@ CREATE TABLE Parcelas(
     Id INT PRIMARY KEY IDENTITY,
 	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
 	Numero INT NOT NULL,
-	Valor INT NOT NULL,
-	Porcentagem_Desconto DECIMAL(3, 2) NOT NULL,
-	Valor_Desconto INT NOT NULL,
-	Valor_Pago INT,
+	Valor MONEY NOT NULL,
+	Porcentagem_Desconto INT NOT NULL,
+	Valor_Pago MONEY,
 	Data_Vencimento DATE NOT NULL,
 	Data_Pagamento DATE
 )
@@ -154,9 +153,8 @@ CREATE TABLE Transacoes_Produtos(
     Id INT PRIMARY KEY IDENTITY,
     Id_Transacoes INT REFERENCES Transacoes(Id),
     Id_Produto INT REFERENCES Produtos(Id),
-    Quantidade INT NOT NULL,
-    Valor_Unitario INT NOT NULL,
-	Valor_Total INT NOT NULL,
+    Quantidade DECIMAL(8, 2) NOT NULL,
+    Valor_Unitario MONEY NOT NULL,
 	Desconto_Unitario INT NOT NULL
 )
 

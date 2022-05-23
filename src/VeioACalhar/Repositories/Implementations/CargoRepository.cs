@@ -18,13 +18,14 @@ public class CargoRepository : ICargoRepository
         using var command = commandFactory.Create("INSERT INTO Cargos(Nome) OUTPUT INSERTED.Id VALUES (@Nome)");
         command.AddParameter("@Nome", cargo.Nome);
 
-        var id = (int)command.ExecuteScalar()!;
+        var id = command.ExecuteScalar<int>();
+
         return cargo with { Id = id };
     }
 
     public Cargo Get(int id)
     {
-        using var command = commandFactory.Create("SELECT * FROM Cargos WHERE Id=@Id");
+        using var command = commandFactory.Create("SELECT * FROM Cargos WHERE Id = @Id");
         command.AddParameter("@Id", id);
         using var reader = command.ExecuteReader();
 
@@ -33,21 +34,22 @@ public class CargoRepository : ICargoRepository
         return new();
     }
 
-    public IEnumerable<Cargo> Get()
+    public IReadOnlyCollection<Cargo> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Cargos");
         using var reader = command.ExecuteReader();
 
+        var cargos = new List<Cargo>();
         while (reader.Read())
-            yield return CreateCargo(reader);
+            cargos.Add(CreateCargo(reader));
+        return cargos;
     }
 
     public Cargo Update(Cargo cargo)
     {
-        using var command = commandFactory.Create("UPDATE Cargos SET (Nome=@Nome) WHERE Id=@Id");
+        using var command = commandFactory.Create("UPDATE Cargos SET Nome = @Nome WHERE Id = @Id");
         command.AddParameter("@Id", cargo.Id);
         command.AddParameter("@Nome", cargo.Nome);
-
         command.ExecuteNonQuery();
 
         return cargo;
@@ -55,19 +57,17 @@ public class CargoRepository : ICargoRepository
 
     public void Delete(Cargo cargo)
     {
-        using var command = commandFactory.Create("DELETE FROM Cargos WHERE Id=@Id");
+        using var command = commandFactory.Create("DELETE FROM Cargos WHERE Id = @Id");
         command.AddParameter("@Id", cargo.Id);
-
         command.ExecuteNonQuery();
     }
 
     private static Cargo CreateCargo(SqlDataReader reader)
     {
-        return new()
+        return new Cargo
         {
-            Id = (int)reader["Id"],
-            Nome = (string)reader["Nome"]
+            Id = reader.GetInt32(0),
+            Nome = reader.GetString(1)
         };
     }
-
 }

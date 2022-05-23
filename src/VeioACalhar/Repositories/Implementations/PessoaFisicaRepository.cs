@@ -1,89 +1,86 @@
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using VeioACalhar.Commands;
 using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
-public class PessoaFisicaRepository : IPessoaFisicaRepository
+public class PessoaFisicaRepository<TPessoa> : IPessoaFisicaRepository<TPessoa> where TPessoa : PessoaFisica, new()
 {
     private readonly ISqlCommandFactory commandFactory;
-    private readonly IPessoaRepository pessoaRepository;
+    private readonly IPessoaRepository<TPessoa> pessoaRepository;
 
-    public PessoaFisicaRepository(ISqlCommandFactory commandFactory, IPessoaRepository pessoaRepository)
+    public PessoaFisicaRepository(ISqlCommandFactory commandFactory, IPessoaRepository<TPessoa> pessoaRepository)
     {
         this.commandFactory = commandFactory;
         this.pessoaRepository = pessoaRepository;
     }
 
-    public PessoaFisica Create(PessoaFisica pessoaFisica)
+    public TPessoa Create(TPessoa pessoa)
     {
-        var pessoa = pessoaRepository.Create(pessoaFisica);
-        using var command = commandFactory.Create("INSERT INTO Pessoas_Fisicas(Id, CPF, RG) VALUES (@Id, @CPF, @RG)");
+        pessoa = pessoaRepository.Create(pessoa);
+        using var command = commandFactory.Create("INSERT INTO Pessoas_Fisicas(Id, Cpf, Rg) VALUES(@Id, @Cpf, @Rg)");
         command.AddParameter("@Id", pessoa.Id);
-        command.AddParameter("@CPF", pessoaFisica.Cpf);
-        command.AddParameter("@RG", pessoaFisica.Rg);
+        command.AddParameter("@Cpf", pessoa.Cpf);
+        command.AddParameter("@Rg", pessoa.Rg);
+
         command.ExecuteNonQuery();
 
-        return pessoaFisica with { Id = pessoa.Id };
+        return pessoa;
     }
 
-    public PessoaFisica Get(int id)
+    public TPessoa Get(int id)
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Fisicas WHERE Id = @Id");
         command.AddParameter("@Id", id);
-
         using var reader = command.ExecuteReader();
-
         if (reader.Read())
-            return CreatePessoaFisica(reader);
+            return CreatePessoa(reader);
         return new();
     }
 
-    public IEnumerable<PessoaFisica> Get()
+    public IReadOnlyCollection<TPessoa> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Fisicas");
         using var reader = command.ExecuteReader();
 
+        var pessoas = new List<TPessoa>();
         while (reader.Read())
-            yield return CreatePessoaFisica(reader);
+            pessoas.Add(CreatePessoa(reader));
+
+        return pessoas;
     }
 
-    public PessoaFisica Update(PessoaFisica pessoaFisica)
+    public TPessoa Update(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("UPDATE Pessoas_Fisicas SET CPF = @CPF, RG = @RG WHERE Id = @Id");
-        command.AddParameter("@Id", pessoaFisica.Id);
-        command.AddParameter("@CPF", pessoaFisica.Cpf);
-        command.AddParameter("@RG", pessoaFisica.Rg);
+        pessoa = pessoaRepository.Update(pessoa);
+        using var command = commandFactory.Create("UPDATE Pessoas_Fisicas SET Cpf = @Cpf, Rg = @Rg WHERE Id = @Id");
+        command.AddParameter("@Id", pessoa.Id);
+        command.AddParameter("@Cpf", pessoa.Cpf);
+        command.AddParameter("@Rg", pessoa.Rg);
+
         command.ExecuteNonQuery();
 
-        return (PessoaFisica)pessoaRepository.Update(pessoaFisica);
+        return pessoa;
     }
 
-    public void Delete(PessoaFisica pessoaFisica)
+    public void Delete(TPessoa pessoa)
     {
         using var command = commandFactory.Create("DELETE FROM Pessoas_Fisicas WHERE Id = @Id");
-        command.AddParameter("@Id", pessoaFisica.Id);
+        command.AddParameter("@Id", pessoa.Id);
         command.ExecuteNonQuery();
 
-        pessoaRepository.Delete(pessoaFisica);
+        pessoaRepository.Delete(pessoa);
     }
 
-    private PessoaFisica CreatePessoaFisica(SqlDataReader reader)
+    private TPessoa CreatePessoa(SqlDataReader reader)
     {
         var id = (int)reader["Id"];
         var pessoa = pessoaRepository.Get(id);
 
-        return new()
+        return pessoa with
         {
-            Id = pessoa.Id,
-            Nome = pessoa.Nome,
-            Observacoes = pessoa.Observacoes,
-            Pix = pessoa.Pix,
-            Email = pessoa.Email,
-            Enderecos = pessoa.Enderecos,
-            Telefones = pessoa.Telefones,
-            Cpf = (string)reader["CPF"],
-            Rg = (string)reader["RG"]
+            Cpf = (string)reader["Cpf"],
+            Rg = (string)reader["Rg"]
         };
     }
 }

@@ -1,4 +1,5 @@
-﻿using VeioACalhar.Commands;
+﻿using System.Data.SqlClient;
+using VeioACalhar.Commands;
 using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
@@ -12,39 +13,38 @@ public class TelefoneRepository : ITelefoneRepository
         this.commandFactory = commandFactory;
     }
 
-    public IEnumerable<Telefone> CreateFrom(Pessoa pessoa)
+    public IReadOnlyCollection<Telefone> CreateFor(Pessoa pessoa)
     {
+        var telefones = new List<Telefone>();
         foreach (var telefone in pessoa.Telefones)
-            yield return Create(telefone, pessoa);
+            telefones.Add(Create(telefone, pessoa));
+        return telefones;
     }
 
-    public IEnumerable<Telefone> GetFrom(Pessoa pessoa)
+    public IReadOnlyCollection<Telefone> GetFor(Pessoa pessoa)
     {
-        using var command = commandFactory.Create("SELECT * FROM Pessoas_Telefones WHERE Id_Pessoa=@Id_Pessoa");
+        using var command = commandFactory.Create("SELECT * FROM Pessoas_Telefones WHERE Id_Pessoa = @Id_Pessoa");
         command.AddParameter("@Id_Pessoa", pessoa.Id);
+
         using var reader = command.ExecuteReader();
 
+        var telefones = new List<Telefone>();
+
         while (reader.Read())
-        {
-            yield return new()
-            {
-                Id = (int)reader["Id"],
-                Pessoa = pessoa,
-                Numero = (string)reader["Numero"],
-                Observacoes = (string)reader["Observacoes"]
-            };
-        }
+            telefones.Add(CreateTelefone(reader));
+
+        return telefones;
     }
 
-    public IEnumerable<Telefone> UpdateFrom(Pessoa pessoa)
+    public IReadOnlyCollection<Telefone> UpdateFor(Pessoa pessoa)
     {
-        DeleteFrom(pessoa);
-        return CreateFrom(pessoa);
+        DeleteFor(pessoa);
+        return CreateFor(pessoa);
     }
 
-    public void DeleteFrom(Pessoa pessoa)
+    public void DeleteFor(Pessoa pessoa)
     {
-        using var command = commandFactory.Create("DELETE FROM Pessoas_Telefones WHERE Id_Pessoa=@Id_Pessoa");
+        using var command = commandFactory.Create("DELETE FROM Pessoas_Telefones WHERE Id_Pessoa = @Id_Pessoa");
         command.AddParameter("@Id_Pessoa", pessoa.Id);
         command.ExecuteNonQuery();
     }
@@ -56,8 +56,18 @@ public class TelefoneRepository : ITelefoneRepository
         command.AddParameter("@Numero", telefone.Numero);
         command.AddParameter("@Observacoes", telefone.Observacoes);
 
-        var id = (int)command.ExecuteScalar()!;
+        var id = command.ExecuteScalar<int>();
 
-        return telefone with { Id = id, Pessoa = pessoa };
+        return telefone with { Id = id };
+    }
+
+    private static Telefone CreateTelefone(SqlDataReader reader)
+    {
+        return new()
+        {
+            Id = (int)reader["Id"],
+            Numero = (string)reader["Numero"],
+            Observacoes = (string)reader["Observacoes"],
+        };
     }
 }

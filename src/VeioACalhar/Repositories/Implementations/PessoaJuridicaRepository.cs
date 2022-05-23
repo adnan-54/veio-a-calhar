@@ -4,85 +4,90 @@ using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
-public class PessoaJuridicaRepository : IPessoaJuridicaRepository
+public class PessoaJuridicaRepository<TPessoa> : IPessoaJuridicaRepository<TPessoa> where TPessoa : PessoaJuridica, new()
 {
     private readonly ISqlCommandFactory commandFactory;
-    private readonly IPessoaRepository pessoaRepository;
+    private readonly IPessoaRepository<TPessoa> pessoaRepository;
 
-    public PessoaJuridicaRepository(ISqlCommandFactory commandFactory, IPessoaRepository pessoaRepository)
+    public PessoaJuridicaRepository(ISqlCommandFactory commandFactory, IPessoaRepository<TPessoa> pessoaRepository)
     {
         this.commandFactory = commandFactory;
         this.pessoaRepository = pessoaRepository;
     }
 
-    public PessoaJuridica Create(PessoaJuridica pessoaJuridica)
+    public TPessoa Create(TPessoa pessoa)
     {
-        pessoaJuridica = (PessoaJuridica)pessoaRepository.Create(pessoaJuridica);
-        using var command = commandFactory.Create("INSERT INTO Pessoas_Juridicas(Id, CNPJ, Inscricao_Estadual) VALUES (@Id, @CNPJ, @Inscricao_Estadual)");
-        command.AddParameter("@Id", pessoaJuridica.Id);
-        command.AddParameter("@CNPJ", pessoaJuridica.Cnpj);
-        command.AddParameter("@Inscricao_Estadual", pessoaJuridica.InscricaoEstadual);
+        pessoa = pessoaRepository.Create(pessoa);
+
+        using var command = commandFactory.Create("INSERT INTO Pessoas_Juridicas (Id, Nome_Fantasia, Inscricao_Estadual, Cnpj) VALUES (@Id, @Nome_Fantasia, @Inscricao_Estadual, @Cnpj)");
+        command.AddParameter("@Id", pessoa.Id);
+        command.AddParameter("@Nome_Fantasia", pessoa.NomeFantasia);
+        command.AddParameter("@Inscricao_Estadual", pessoa.InscricaoEstadual);
+        command.AddParameter("@Cnpj", pessoa.Cnpj);
+
         command.ExecuteNonQuery();
 
-        return pessoaJuridica;
+        return pessoa;
+
     }
 
-    public PessoaJuridica Get(int id)
+    public TPessoa Get(int id)
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Juridicas WHERE Id = @Id");
         command.AddParameter("@Id", id);
         using var reader = command.ExecuteReader();
 
         if (reader.Read())
-            return CreatePessoaJuridica(reader);
+            return CreatePessoa(reader);
         return new();
+
     }
 
-    public IEnumerable<PessoaJuridica> Get()
+    public IReadOnlyCollection<TPessoa> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Pessoas_Juridicas");
         using var reader = command.ExecuteReader();
 
+        var pessoas = new List<TPessoa>();
         while (reader.Read())
-            yield return CreatePessoaJuridica(reader);
+            pessoas.Add(CreatePessoa(reader));
+
+        return pessoas;
     }
 
-    public PessoaJuridica Update(PessoaJuridica pessoaJuridica)
+    public TPessoa Update(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("UPDATE Pessoas_Juridicas SET CNPJ = @CNPJ, Inscricao_Estadual = @Inscricao_Estadual WHERE Id = @Id");
-        command.AddParameter("@Id", pessoaJuridica.Id);
-        command.AddParameter("@CNPJ", pessoaJuridica.Cnpj);
-        command.AddParameter("@Inscricao_Estadual", pessoaJuridica.InscricaoEstadual);
+        pessoa = pessoaRepository.Update(pessoa);
+        using var command = commandFactory.Create("-");
+        command.AddParameter("@Id", pessoa.Id);
+        command.AddParameter("@Nome_Fantasia", pessoa.NomeFantasia);
+        command.AddParameter("@Inscricao_Estadual", pessoa.InscricaoEstadual);
+        command.AddParameter("@Cnpj", pessoa.Cnpj);
+
         command.ExecuteNonQuery();
 
-        return (PessoaJuridica)pessoaRepository.Update(pessoaJuridica);
+        return pessoa;
     }
 
-    public void Delete(PessoaJuridica pessoaJuridica)
+    public void Delete(TPessoa pessoa)
     {
         using var command = commandFactory.Create("DELETE FROM Pessoas_Juridicas WHERE Id = @Id");
-        command.AddParameter("@Id", pessoaJuridica.Id);
+        command.AddParameter("@Id", pessoa.Id);
         command.ExecuteNonQuery();
 
-        pessoaRepository.Delete(pessoaJuridica);
+        pessoaRepository.Delete(pessoa);
     }
 
-    private PessoaJuridica CreatePessoaJuridica(SqlDataReader reader)
+    private TPessoa CreatePessoa(SqlDataReader reader)
     {
         var id = (int)reader["Id"];
         var pessoa = pessoaRepository.Get(id);
 
-        return new()
+        return pessoa with
         {
-            Id = id,
-            Nome = pessoa.Nome,
-            Observacoes = pessoa.Observacoes,
-            Pix = pessoa.Pix,
-            Email = pessoa.Email,
-            Enderecos = pessoa.Enderecos,
-            Telefones = pessoa.Telefones,
-            Cnpj = (string)reader["CNPJ"],
-            InscricaoEstadual = (string)reader["Inscricao_Estadual"]
+            NomeFantasia = (string)reader["Nome_Fantasia"],
+            InscricaoEstadual = (string)reader["Inscricao_Estadual"],
+            Cnpj = (string)reader["Cnpj"]
         };
     }
 }

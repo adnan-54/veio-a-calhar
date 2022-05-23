@@ -2,15 +2,15 @@
 
 namespace VeioACalhar.Repositories;
 
-public interface IPessoaRepository
+public interface IPessoaRepository<TPessoa> where TPessoa : Pessoa, new()
 {
-    Pessoa Create(Pessoa pessoa);
+    TPessoa Create(TPessoa pessoa);
 
-    Pessoa Get(int id);
+    TPessoa Get(int id);
 
-    IEnumerable<Pessoa> Get();
+    IReadOnlyCollection<TPessoa> GetAll();
 
-    Pessoa Update(Pessoa pessoa);
+    TPessoa Update(TPessoa pessoa);
 
-    void Delete(Pessoa pessoa);
+    void Delete(TPessoa pessoa);
 }

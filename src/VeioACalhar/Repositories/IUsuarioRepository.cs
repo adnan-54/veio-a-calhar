@@ -4,15 +4,15 @@ namespace VeioACalhar.Repositories;
 
 public interface IUsuarioRepository
 {
-    Usuario Create(Usuario usuario);
+    Usuario Create(Usuario usuario, string senha);
 
     Usuario Get(int id);
 
-    IEnumerable<Usuario> Get();
+    Usuario Get(string login, string senha);
+
+    IReadOnlyCollection<Usuario> GetAll();
 
     Usuario Update(Usuario usuario);
-
-    Usuario UpdatePassword(Usuario usuario, string password);
 
     void Delete(Usuario usuario);
 }

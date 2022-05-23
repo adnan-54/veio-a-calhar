@@ -1,6 +1,6 @@
 ﻿namespace VeioACalhar.Models;
 
-public record Transacao : Entidade
+public abstract record Transacao : Entidade
 {
     public Transacao()
     {

@@ -7,29 +7,26 @@ namespace VeioACalhar.Repositories;
 public class FuncionarioRepository : IFuncionarioRepository
 {
     private readonly ISqlCommandFactory commandFactory;
-    private readonly IPessoaFisicaRepository pessoaFisicaRepository;
     private readonly ICargoRepository cargoRepository;
     private readonly IUsuarioRepository usuarioRepository;
 
-    public FuncionarioRepository(ISqlCommandFactory commandFactory, IPessoaFisicaRepository pessoaFisicaRepository, ICargoRepository cargoRepository, IUsuarioRepository usuarioRepository)
+    public FuncionarioRepository(ISqlCommandFactory commandFactory, ICargoRepository cargoRepository, IUsuarioRepository usuarioRepository)
     {
         this.commandFactory = commandFactory;
-        this.pessoaFisicaRepository = pessoaFisicaRepository;
         this.cargoRepository = cargoRepository;
         this.usuarioRepository = usuarioRepository;
     }
 
     public Funcionario Create(Funcionario funcionario)
     {
-        var pessoaFisica = pessoaFisicaRepository.Create(funcionario);
-        using var command = commandFactory.Create("INSERT INTO Funcionarios(Id, Id_Cargo, Id_Usuario, Salario) VALUES (@Id, @Id_Cargo, @Id_Usuario, @Salario)");
-        command.AddParameter("@Id", pessoaFisica.Id);
+        using var command = commandFactory.Create("INSERT INTO Funcionarios(Id_Cargo, Id_Usuario, Salario) OUTPUT INSERTED.Id VALUES (@Id_Cargo, @Id_Usuario, @Salario)");
         command.AddParameter("@Id_Cargo", funcionario.Cargo.Id);
         command.AddParameter("@Id_Usuario", funcionario.Usuario.Id);
         command.AddParameter("@Salario", funcionario.Salario);
-        command.ExecuteNonQuery();
 
-        return funcionario with { Id = pessoaFisica.Id };
+        var id = command.ExecuteScalar<int>();
+
+        return funcionario with { Id = id };
     }
 
     public Funcionario Get(int id)
@@ -43,12 +40,15 @@ public class FuncionarioRepository : IFuncionarioRepository
         return new();
     }
 
-    public IEnumerable<Funcionario> Get()
+    public IReadOnlyCollection<Funcionario> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Funcionarios");
         using var reader = command.ExecuteReader();
+
+        var funcionarios = new List<Funcionario>();
         while (reader.Read())
-            yield return CreateFuncionario(reader);
+            funcionarios.Add(CreateFuncionario(reader));
+        return funcionarios;
     }
 
     public Funcionario Update(Funcionario funcionario)
@@ -60,7 +60,7 @@ public class FuncionarioRepository : IFuncionarioRepository
         command.AddParameter("@Salario", funcionario.Salario);
         command.ExecuteNonQuery();
 
-        return (Funcionario)pessoaFisicaRepository.Update(funcionario);
+        return funcionario;
     }
 
     public void Delete(Funcionario funcionario)
@@ -68,33 +68,16 @@ public class FuncionarioRepository : IFuncionarioRepository
         using var command = commandFactory.Create("DELETE FROM Funcionarios WHERE Id = @Id");
         command.AddParameter("@Id", funcionario.Id);
         command.ExecuteNonQuery();
-
-        pessoaFisicaRepository.Delete(funcionario);
     }
 
     private Funcionario CreateFuncionario(SqlDataReader reader)
     {
-        var id = (int)reader["Id"];
-        var cargo = cargoRepository.Get((int)reader["Id_Cargo"]);
-        var usuario = usuarioRepository.Get((int)reader["Id_Usuario"]);
-        var salario = (decimal)reader["Salario"];
-
-        var pessoaFisica = pessoaFisicaRepository.Get(id);
-
         return new()
         {
-            Id = id,
-            Cargo = cargo,
-            Usuario = usuario,
-            Salario = salario,
-            Cpf = pessoaFisica.Cpf,
-            Rg = pessoaFisica.Rg,
-            Nome = pessoaFisica.Nome,
-            Observacoes = pessoaFisica.Observacoes,
-            Pix = pessoaFisica.Pix,
-            Email = pessoaFisica.Email,
-            Enderecos = pessoaFisica.Enderecos,
-            Telefones = pessoaFisica.Telefones
+            Id = reader.GetInt32(0),
+            Cargo = cargoRepository.Get(reader.GetInt32(1)),
+            Usuario = usuarioRepository.Get(reader.GetInt32(2)),
+            Salario = reader.GetDecimal(3)
         };
     }
 }

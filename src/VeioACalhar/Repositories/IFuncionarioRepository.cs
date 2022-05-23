@@ -6,9 +6,9 @@ public interface IFuncionarioRepository
 {
     Funcionario Create(Funcionario funcionario);
 
-    Funcionario? Get(int id);
+    Funcionario Get(int id);
 
-    IEnumerable<Funcionario> Get();
+    IReadOnlyCollection<Funcionario> GetAll();
 
     Funcionario Update(Funcionario funcionario);
 

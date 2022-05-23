@@ -6,28 +6,31 @@ namespace VeioACalhar.Repositories;
 
 public class UsuarioRepository : IUsuarioRepository
 {
-    private readonly ISqlCommandFactory sqlCommandFactory;
+    private readonly ISqlCommandFactory commandFactory;
 
-    public UsuarioRepository(ISqlCommandFactory sqlCommandFactory)
+    public UsuarioRepository(ISqlCommandFactory commandFactory)
     {
-        this.sqlCommandFactory = sqlCommandFactory;
+        this.commandFactory = commandFactory;
     }
 
-    public Usuario Create(Usuario usuario)
+    public Usuario Create(Usuario usuario, string senha)
     {
-        using var command = sqlCommandFactory.Create("INSERT INTO Usuarios(Login, Data_Cadastro, Ativo) OUTPUT INSERTED.Id VALUES (@Login, @Data_Cadastro, @Ativo)");
+        var dataCadastro = DateOnly.FromDateTime(DateTime.Today);
+
+        using var command = commandFactory.Create("INSERT INTO Usuarios(Login, Senha, Data_Cadastro, Ativo) OUTPUT INSERTED.Id VALUES (@Login, @Senha, @Data_Cadastro, @Ativo)");
         command.AddParameter("@Login", usuario.Login);
-        command.AddParameter("@Data_Cadastro", usuario.DataCadastro);
-        command.AddParameter("@Ativo", usuario.Ativo);
+        command.AddParameter("@Senha", BCrypt.Net.BCrypt.HashPassword(senha));
+        command.AddParameter("@Data_Cadastro", dataCadastro);
+        command.AddParameter("@Ativo", true);
 
-        var id = (int)command.ExecuteScalar()!;
+        var id = command.ExecuteScalar<int>();
 
-        return usuario with { Id = id };
+        return usuario with { Id = id, DataCadastro = dataCadastro, Ativo = true };
     }
 
     public Usuario Get(int id)
     {
-        using var command = sqlCommandFactory.Create("SELECT (Id, Login, Data_Cadastro, Ativo) FROM Usuarios WHERE Id = @Id");
+        using var command = commandFactory.Create("SELECT * FROM Usuarios WHERE Id = @Id");
         command.AddParameter("@Id", id);
         using var reader = command.ExecuteReader();
 
@@ -36,34 +39,38 @@ public class UsuarioRepository : IUsuarioRepository
         return new();
     }
 
-    public IEnumerable<Usuario> Get()
+    public Usuario Get(string login, string senha)
     {
-        using var command = sqlCommandFactory.Create("SELECT (Id, Login, Data_Cadastro, Ativo) FROM Usuarios");
+        senha = BCrypt.Net.BCrypt.HashPassword(senha);
+
+        using var command = commandFactory.Create("SELECT * FROM Usuarios WHERE Login = @Login AND Senha = @Senha AND Ativo = @Ativo");
+        command.AddParameter("@Login", login);
+        command.AddParameter("@Senha", senha);
+        command.AddParameter("@Ativo", true);
         using var reader = command.ExecuteReader();
 
+        if (reader.Read())
+            return CreateUsuario(reader);
+        return new();
+    }
+
+    public IReadOnlyCollection<Usuario> GetAll()
+    {
+        using var command = commandFactory.Create("SELECT * FROM Usuarios");
+        using var reader = command.ExecuteReader();
+
+        var usuarios = new List<Usuario>();
         while (reader.Read())
-            yield return CreateUsuario(reader);
+            usuarios.Add(CreateUsuario(reader));
+        return usuarios;
     }
 
     public Usuario Update(Usuario usuario)
     {
-        using var command = sqlCommandFactory.Create("UPDATE Usuarios SET Login = @Login, Data_Cadastro = @Data_Cadastro, Ativo = @Ativo WHERE Id = @Id");
+        using var command = commandFactory.Create("UPDATE Usuarios SET Login = @Login, Ativo = @Ativo WHERE Id = @Id");
         command.AddParameter("@Id", usuario.Id);
         command.AddParameter("@Login", usuario.Login);
-        command.AddParameter("@Data_Cadastro", usuario.DataCadastro);
         command.AddParameter("@Ativo", usuario.Ativo);
-
-        command.ExecuteNonQuery();
-
-        return usuario;
-    }
-
-    public Usuario UpdatePassword(Usuario usuario, string password)
-    {
-        using var command = sqlCommandFactory.Create("UPDATE Usuarios SET Senha = @Senha WHERE Id = @Id");
-        command.AddParameter("@Id", usuario.Id);
-        command.AddParameter("@Senha", password);
-
         command.ExecuteNonQuery();
 
         return usuario;
@@ -71,7 +78,7 @@ public class UsuarioRepository : IUsuarioRepository
 
     public void Delete(Usuario usuario)
     {
-        using var command = sqlCommandFactory.Create("DELETE FROM Usuarios WHERE Id = @Id");
+        using var command = commandFactory.Create("DELETE FROM Usuarios WHERE Id = @Id");
         command.AddParameter("@Id", usuario.Id);
         command.ExecuteNonQuery();
     }
@@ -80,10 +87,10 @@ public class UsuarioRepository : IUsuarioRepository
     {
         return new()
         {
-            Id = (int)reader["Id"],
-            Login = (string)reader["Login"],
-            DataCadastro = (DateOnly)reader["Data_Cadastro"],
-            Ativo = (bool)reader["Ativo"]
+            Id = reader.GetInt32(0),
+            Login = reader.GetString(1),
+            DataCadastro = DateOnly.FromDateTime(reader.GetDateTime(3)),
+            Ativo = reader.GetBoolean(4)
         };
     }
 }

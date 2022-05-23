@@ -1,6 +1,6 @@
 namespace VeioACalhar.Models;
 
-public record PessoaFisica : Pessoa
+public abstract record PessoaFisica : Pessoa
 {
     public PessoaFisica()
     {
