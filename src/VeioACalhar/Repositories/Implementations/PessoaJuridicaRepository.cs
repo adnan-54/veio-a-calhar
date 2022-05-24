@@ -58,7 +58,7 @@ public class PessoaJuridicaRepository<TPessoa> : IPessoaJuridicaRepository<TPess
     public TPessoa Update(TPessoa pessoa)
     {
         pessoa = pessoaRepository.Update(pessoa);
-        using var command = commandFactory.Create("-");
+        using var command = commandFactory.Create("UPDATE Pessoas_Juridicas SET Cnpj = @Cnpj, Inscricao_Estadual = @Inscricao_Estadual, Nome_Fantasia = @Nome_Fantasia WHERE Id = @Id ");
         command.AddParameter("@Id", pessoa.Id);
         command.AddParameter("@Nome_Fantasia", pessoa.NomeFantasia);
         command.AddParameter("@Inscricao_Estadual", pessoa.InscricaoEstadual);

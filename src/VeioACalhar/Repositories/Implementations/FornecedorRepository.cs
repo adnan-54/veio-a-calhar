@@ -18,7 +18,7 @@ public class FornecedorRepository : IFornecedorRepository
     {
         fornecedor = pessoaRepository.Create(fornecedor);
 
-        using var command = commandFactory.Create("INSERT INTO Fornecedors(Id) VALUES (@Id)");
+        using var command = commandFactory.Create("INSERT INTO Fornecedores(Id) VALUES (@Id)");
         command.AddParameter("@Id", fornecedor.Id);
         command.ExecuteNonQuery();
 

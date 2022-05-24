@@ -1,0 +1,87 @@
+﻿@model Fornecedor
+
+@{
+    ViewData["Title"] = "Novo Fornecedor";
+}
+
+<div class="container">
+
+    <h1>Novo Fornecedor</h1>
+
+    <hr />
+
+    <form asp-action="Create">
+        <div class="d-flex flex-column">
+            <div class="d-flex align-items-stretch ">
+                <div class="flex-fill">
+                    <div class="form-group">
+                        <label class="control-label">Nome</label>
+
+                        <input type="text" class="form-control" id="Nome" name="Nome" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Nome Fantasia</label>
+
+                        <input type="text" class="form-control" id="NomeFantasia" name="NomeFantasia" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Inscrição Estadual</label>
+
+                        <input type="text" class="form-control" id="InscricaoEstadual" name="InscricaoEstadual" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">CNPJ</label>
+
+                        <input type="text" class="form-control" id="Cnpj" name="Cnpj" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Pix</label>
+
+                        <input type="text" class="form-control" id="Pix" name="Pix" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+
+                        <input type="email" class="form-control" id="Email" name="Email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Observações</label>
+
+                        <input type="text" class="form-control" id="Observacoes" name="Observacoes" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Telefone</label>
+
+                        <input type="tel" class="form-control" id="Telefone" name="Telefone" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Endereço</label>
+
+                        <input type="tel" class="form-control" id="Endereco" name="Endereco" />
+                    </div>
+                </div>
+
+                @*                <div class="vr mx-2"></div>
+
+                <div class="flex-fill">
+                </div>*@
+            </div>
+
+            <div class="d-flex mt-3">
+                <a class="btn btn-outline-secondary" style="width: 100px" asp-action="Index">Cancelar</a>
+
+                <input type="reset" class="btn btn-outline-primary mx-2" style="width: 100px" />
+
+                <input type="submit" class="btn btn-primary" style="width: 100px" value="Criar" />
+            </div>
+        </div>
+    </form>
+</div>
