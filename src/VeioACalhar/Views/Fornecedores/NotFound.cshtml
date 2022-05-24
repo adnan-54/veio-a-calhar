@@ -1,0 +1,21 @@
+﻿@model Fornecedor
+
+@{
+    ViewData["Title"] = "Fornecedor Não Encontrado";
+}
+
+<div class="container">
+    <div class="alert alert-danger" role="alert">
+        <h1>
+            Fornecedor não encontrado.
+        </h1>
+
+        <p>
+            Não foi possível encontrar o fornecedor especificado.
+        </p>
+    </div>
+
+    <div>
+        @Html.ActionLink("Voltar", "Index", new{ }, new { @class = "btn btn-primary", @style="width: 100px" })
+    </div>
+</div>

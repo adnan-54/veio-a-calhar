@@ -1,0 +1,84 @@
+﻿@model Fornecedor
+
+@{
+    ViewData["Title"] = "Editar Fornecedor";
+}
+<div class="container">
+
+    <h1>Editar Fornecedor</h1>
+
+    <hr />
+
+    <form asp-action="Edit">
+        <div class="d-flex flex-column">
+            <div class="d-flex align-items-stretch ">
+                <div class="flex-fill">
+                    <div class="form-group">
+                        <label asp-for="Nome" class="control-label">Nome</label>
+                        
+                        <input asp-for="Nome" type="text" class="form-control" id="Nome" name="Nome" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="NomeFantasia" class="control-label">Nome Fantasia</label>
+
+                        <input asp-for="NomeFantasia" type="text" class="form-control" id="NomeFantasia" name="NomeFantasia" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="InscricaoEstadual" class="control-label">Inscrição Estadual</label>
+
+                        <input asp-for="InscricaoEstadual" type="text" class="form-control" id="InscricaoEstadual" name="InscricaoEstadual" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Cnpj" class="control-label">CNPJ</label>
+
+                        <input asp-for="Cnpj" type="text" class="form-control" id="Cnpj" name="Cnpj" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Pix" class="control-label">Pix</label>
+
+                        <input asp-for="Pix" type="text" class="form-control" id="Pix" name="Pix" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label">Email</label>
+
+                        <input asp-for="Email" type="email" class="form-control" id="Email" name="Email" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Observacoes" class="control-label">Observações</label>
+
+                        <input asp-for="Observacoes" type="text" class="form-control" id="Observacoes" name="Observacoes" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Telefones" class="control-label">Telefone</label>
+
+                        <input asp-for="Telefones" type="tel" class="form-control" id="Telefone" name="Telefone" />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Enderecos" class="control-label">Endereço</label>
+
+                        <input asp-for="Enderecos" type="tel" class="form-control" id="Endereco" name="Endereco" />
+                    </div>
+                </div>
+
+@*                <div class="vr mx-2"></div>
+
+                <div class="flex-fill">
+                </div>*@
+            </div>
+
+            <div class="d-flex mt-3">
+                <a class="btn btn-outline-secondary" style="width: 100px" asp-action="Index">Cancelar</a>
+
+                <input type="submit" class="btn btn-primary mx-2" style="width: 100px" value="Salvar" />
+            </div>
+        </div>
+    </form>
+</div>
