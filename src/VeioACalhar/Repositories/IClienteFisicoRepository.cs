@@ -2,15 +2,15 @@
 
 namespace VeioACalhar.Repositories;
 
-public interface IClienteFisicoRepository
+public interface IClienteRepository
 {
-    ClienteFisico Create(ClienteFisico cliente);
+    Cliente Create(Cliente cliente);
 
-    ClienteFisico Get(int id);
+    Cliente Get(int id);
 
-    IReadOnlyCollection<ClienteFisico> GetAll();
+    IReadOnlyCollection<Cliente> GetAll();
 
-    ClienteFisico Update(ClienteFisico cliente);
+    Cliente Update(Cliente cliente);
 
-    void Delete(ClienteFisico cliente);
+    void Delete(Cliente cliente);
 }

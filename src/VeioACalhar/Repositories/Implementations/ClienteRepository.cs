@@ -1,63 +1,62 @@
-﻿using VeioACalhar.Models;
+﻿using VeioACalhar.Commands;
+using VeioACalhar.Models;
 
 namespace VeioACalhar.Repositories;
 
 public class ClienteRepository : IClienteRepository
 {
-    private readonly IClienteFisicoRepository clienteFisicoRepository;
-    private readonly IClienteJuridicoRepository clienteJuridicoRepository;
+    private readonly ISqlCommandFactory commandFactory;
+    private readonly IPessoaFisicaRepository<Cliente> pessoaRepository;
 
-    public ClienteRepository(IClienteFisicoRepository clienteFisicoRepository, IClienteJuridicoRepository clienteJuridicoRepository)
+    public ClienteRepository(ISqlCommandFactory commandFactory, IPessoaFisicaRepository<Cliente> pessoaRepository)
     {
-        this.clienteFisicoRepository = clienteFisicoRepository;
-        this.clienteJuridicoRepository = clienteJuridicoRepository;
+        this.commandFactory = commandFactory;
+        this.pessoaRepository = pessoaRepository;
     }
 
-    public Pessoa Create(Pessoa cliente)
+    public Cliente Create(Cliente cliente)
     {
-        if (cliente is ClienteFisico clienteFisico)
-            return clienteFisicoRepository.Create(clienteFisico);
-        if (cliente is ClienteJuridico clienteJuridico)
-            return clienteJuridicoRepository.Create(clienteJuridico);
+        cliente = pessoaRepository.Create(cliente);
 
-        throw new Exception("Cliente invalido");
+        using var command = commandFactory.Create("INSERT INTO Clientes(Id) VALUES (@Id)");
+        command.AddParameter("@Id", cliente.Id);
+        command.ExecuteNonQuery();
+
+        return cliente;
     }
 
-    public Pessoa Get(int id)
+    public Cliente Get(int id)
     {
-        var clienteFisico = clienteFisicoRepository.Get(id);
-        if (clienteFisico.Id == id)
-            return clienteFisico;
+        using var command = commandFactory.Create("SELECT * FROM Clientes WHERE Id = @Id");
+        command.AddParameter("@Id", id);
 
-        var clienteJuridico = clienteJuridicoRepository.Get(id);
-        if (clienteJuridico.Id == id)
-            return clienteJuridico;
-
-        throw new Exception("Cliente não encontrado");
+        if (command.ExecuteScalar<int>() == id)
+            return pessoaRepository.Get(id);
+        return new();
     }
 
-    public IReadOnlyCollection<Pessoa> GetAll()
+    public IReadOnlyCollection<Cliente> GetAll()
     {
-        return clienteFisicoRepository.GetAll().Cast<Pessoa>().Concat(clienteJuridicoRepository.GetAll().Cast<Pessoa>()).OrderBy(pessoa => pessoa.Nome).ToList();
+        using var command = commandFactory.Create("SELECT * FROM Clientes_Fisicos");
+        using var reader = command.ExecuteReader();
+
+        var ids = new List<int>();
+        while (reader.Read())
+            ids.Add(reader.GetInt32(0));
+
+        return pessoaRepository.GetAll().Where(cliente => ids.Contains(cliente.Id)).ToList();
     }
 
-    public Pessoa Update(Pessoa cliente)
+    public Cliente Update(Cliente cliente)
     {
-        if (cliente is ClienteFisico clienteFisico)
-            return clienteFisicoRepository.Update(clienteFisico);
-        if (cliente is ClienteJuridico clienteJuridico)
-            return clienteJuridicoRepository.Update(clienteJuridico);
-
-        throw new Exception("Cliente invalido");
+        return pessoaRepository.Update(cliente);
     }
 
-    public void Delete(Pessoa cliente)
+    public void Delete(Cliente cliente)
     {
-        if (cliente is ClienteFisico clienteFisico)
-            clienteFisicoRepository.Delete(clienteFisico);
-        if (cliente is ClienteJuridico clienteJuridico)
-            clienteJuridicoRepository.Delete(clienteJuridico);
-
-        throw new Exception("Cliente invalido");
+        using var command = commandFactory.Create("DELETE FROM Clientes_Fisicos WHERE Id = @Id");
+        command.AddParameter("@Id", cliente.Id);
+        command.ExecuteNonQuery();
+        pessoaRepository.Delete(cliente);
     }
 }

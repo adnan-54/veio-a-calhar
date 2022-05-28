@@ -61,24 +61,24 @@
             </dd>
 
             <dt class="col-sm-2">
-                Observações
-            </dt>
-            <dd class="col-sm-10">
-                @Model.Observacoes
-            </dd>
-
-            <dt class="col-sm-2">
                 Telefone
             </dt>
             <dd class="col-sm-10">
-                @Model.Telefones.FirstOrDefault()?.Numero
+                @Model.Telefone
             </dd>
 
             <dt class="col-sm-2">
                 Endereço
             </dt>
             <dd class="col-sm-10">
-                @Model.Enderecos.FirstOrDefault()?.Logradouro
+                @Model.Endereco
+            </dd>
+
+            <dt class="col-sm-2">
+                Observações
+            </dt>
+            <dd class="col-sm-10">
+                @Model.Observacoes
             </dd>
         </dl>
     </div>

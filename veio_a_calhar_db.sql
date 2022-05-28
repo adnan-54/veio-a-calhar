@@ -9,25 +9,8 @@ CREATE TABLE Pessoas(
 	Observacoes VARCHAR(MAX),
 	Pix VARCHAR(64),
 	Email VARCHAR(64),
-)
-
-CREATE TABLE Pessoas_Enderecos(
-	Id INT PRIMARY KEY IDENTITY,
-	Id_Pessoa INT FOREIGN KEY REFERENCES Pessoas(Id),
-	Logradouro VARCHAR(32) NOT NULL,
-	Numero INT NOT NULL,
-	Bairro VARCHAR(32) NOT NULL,
-	Cidade VARCHAR(16) NOT NULL,
-	Estado VARCHAR(16) NOT NULL,
-	Cep VARCHAR(9),
-	Observacoes VARCHAR(1024)
-)
-
-CREATE TABlE Pessoas_Telefones(
-	Id INT PRIMARY KEY IDENTITY,
-	Id_Pessoa INT FOREIGN KEY REFERENCES Pessoas(Id),
-	Numero VARCHAR(14) NOT NULL,
-	Observacoes VARCHAR(1024)
+	Telefone VARCHAR(64),
+	Endereco VARCHAR(128)
 )
 
 CREATE TABLE Pessoas_Juridicas(
@@ -43,11 +26,7 @@ CREATE TABLE Pessoas_Fisicas(
 	Rg VARCHAR(12)
 )
 
-CREATE TABLE Clientes_Juridicos(
-	Id INT PRIMARY KEY REFERENCES Pessoas_Juridicas(Id),
-)
-
-CREATE TABLE Clientes_Fisicos(
+CREATE TABLE Clientes(
 	Id INT PRIMARY KEY REFERENCES Pessoas_Fisicas(Id),
 )
 
@@ -120,7 +99,7 @@ CREATE TABLE Pagamentos(
 )
 
 CREATE TABLE Parcelas(
-	Id INT PRIMARY KEY IDENTITY,
+	Id INT PRIMARY KEY IDEClientesNTITY,
 	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
 	Numero INT NOT NULL,
 	Valor MONEY NOT NULL,
