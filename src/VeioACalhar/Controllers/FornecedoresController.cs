@@ -33,16 +33,6 @@ public class FornecedoresController : Controller
     {
         try
         {
-            var telefones = new List<Telefone>
-            {
-                new() { Numero = collection["Telefone"] }
-            };
-
-            var enderecos = new List<Endereco>
-            {
-                new() { Logradouro = collection["Endereco"] }
-            };
-
             var fornecedor = new Fornecedor
             {
                 Nome = collection["Nome"],
@@ -52,8 +42,8 @@ public class FornecedoresController : Controller
                 Pix = collection["Pix"],
                 Email = collection["Email"],
                 Observacoes = collection["Observacoes"],
-                Telefones = telefones,
-                Enderecos = enderecos
+                Telefone = collection["Telefone"],
+                Endereco = collection["Endereco"]
             };
 
             fornecedorRepository.Create(fornecedor);
@@ -85,15 +75,6 @@ public class FornecedoresController : Controller
     [HttpPost]
     public IActionResult Edit(int id, IFormCollection collection)
     {
-        var telefones = new List<Telefone>
-        {
-            new() { Numero = collection["Telefone"] }
-        };
-
-        var enderecos = new List<Endereco>
-        {
-            new() { Logradouro = collection["Endereco"] }
-        };
 
         var fornecedor = new Fornecedor
         {
@@ -105,8 +86,8 @@ public class FornecedoresController : Controller
             Pix = collection["Pix"],
             Email = collection["Email"],
             Observacoes = collection["Observacoes"],
-            Telefones = telefones,
-            Enderecos = enderecos
+            Telefone = collection["Telefone"],
+            Endereco = collection["Endereco"]
         };
 
         fornecedorRepository.Update(fornecedor);

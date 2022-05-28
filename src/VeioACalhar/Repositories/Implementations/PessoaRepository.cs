@@ -7,32 +7,25 @@ namespace VeioACalhar.Repositories;
 public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPessoa : Pessoa, new()
 {
     private readonly ISqlCommandFactory commandFactory;
-    private readonly ITelefoneRepository telefoneRepository;
-    private readonly IEnderecoRepository enderecoRepository;
 
-    public PessoaRepository(ISqlCommandFactory commandFactory, ITelefoneRepository telefoneRepository, IEnderecoRepository enderecoRepository)
+    public PessoaRepository(ISqlCommandFactory commandFactory)
     {
         this.commandFactory = commandFactory;
-        this.telefoneRepository = telefoneRepository;
-        this.enderecoRepository = enderecoRepository;
     }
 
     public TPessoa Create(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, Pix, Email) OUTPUT INSERTED.Id VALUES(@Nome, @Observacoes, @Pix, @Email)");
+        using var command = commandFactory.Create("INSERT INTO Pessoas(Nome, Observacoes, Pix, Email, Telefone, Endereco) OUTPUT INSERTED.Id VALUES(@Nome, @Observacoes, @Pix, @Email, @Telefone, @Endereco)");
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
         command.AddParameter("@Pix", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
+        command.AddParameter("@Telefone", pessoa.Telefone);
+        command.AddParameter("@Endereco", pessoa.Endereco);
 
         var id = command.ExecuteScalar<int>();
 
-        pessoa = pessoa with { Id = id };
-
-        var telefones = telefoneRepository.CreateFor(pessoa);
-        var enderecos = enderecoRepository.CreateFor(pessoa);
-
-        return pessoa with { Telefones = telefones, Enderecos = enderecos };
+        return pessoa with { Id = id };
     }
 
     public TPessoa Get(int id)
@@ -61,46 +54,38 @@ public class PessoaRepository<TPessoa> : IPessoaRepository<TPessoa> where TPesso
 
     public TPessoa Update(TPessoa pessoa)
     {
-        using var command = commandFactory.Create("UPDATE Pessoas SET Nome = @Nome, Observacoes = @Observacoes, Pix = @Pix, Email = @Email WHERE Id = @Id");
+        using var command = commandFactory.Create("UPDATE Pessoas SET Nome = @Nome, Observacoes = @Observacoes, Pix = @Pix, Email = @Email, Telefone = @Telefone, Endereco = @Endereco WHERE Id = @Id");
+        command.AddParameter("@Id", pessoa.Id);
         command.AddParameter("@Nome", pessoa.Nome);
         command.AddParameter("@Observacoes", pessoa.Observacoes);
         command.AddParameter("@Pix", pessoa.Pix);
         command.AddParameter("@Email", pessoa.Email);
-        command.AddParameter("@Id", pessoa.Id);
+        command.AddParameter("@Telefone", pessoa.Telefone);
+        command.AddParameter("@Endereco", pessoa.Endereco);
 
         command.ExecuteNonQuery();
 
-        var telefones = telefoneRepository.UpdateFor(pessoa);
-        var enderecos = enderecoRepository.UpdateFor(pessoa);
-
-        return pessoa with { Telefones = telefones, Enderecos = enderecos };
+        return pessoa;
     }
 
     public void Delete(TPessoa pessoa)
     {
-        telefoneRepository.DeleteFor(pessoa);
-        enderecoRepository.DeleteFor(pessoa);
-
         using var command = commandFactory.Create("DELETE FROM Pessoas WHERE Id = @Id");
         command.AddParameter("@Id", pessoa.Id);
-
         command.ExecuteNonQuery();
     }
 
-    private TPessoa CreatePessoa(SqlDataReader reader)
+    private static TPessoa CreatePessoa(SqlDataReader reader)
     {
-        var pessoa = new TPessoa()
+        return new TPessoa()
         {
-            Id = (int)reader["Id"],
-            Nome = (string)reader["Nome"],
-            Observacoes = (string)reader["Observacoes"],
-            Pix = (string)reader["Pix"],
-            Email = (string)reader["Email"]
+            Id = reader.GetInt32(0),
+            Nome = reader.GetString(1),
+            Observacoes = reader.GetString(2),
+            Pix = reader.GetString(3),
+            Email = reader.GetString(4),
+            Telefone = reader.GetString(5),
+            Endereco = reader.GetString(6)
         };
-
-        var telefones = telefoneRepository.GetFor(pessoa);
-        var enderecos = enderecoRepository.GetFor(pessoa);
-
-        return pessoa with { Telefones = telefones, Enderecos = enderecos };
     }
 }

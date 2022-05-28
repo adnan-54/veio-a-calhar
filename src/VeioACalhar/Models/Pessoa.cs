@@ -8,8 +8,8 @@ public abstract record Pessoa : Entidade
         Observacoes = string.Empty;
         Pix = string.Empty;
         Email = string.Empty;
-        Enderecos = Enumerable.Empty<Endereco>();
-        Telefones = Enumerable.Empty<Telefone>();
+        Endereco = string.Empty;
+        Telefone = string.Empty;
     }
 
     public string Nome { get; init; }
@@ -20,7 +20,7 @@ public abstract record Pessoa : Entidade
 
     public string Email { get; init; }
 
-    public IEnumerable<Endereco> Enderecos { get; init; }
+    public string Telefone { get; init; }
 
-    public IEnumerable<Telefone> Telefones { get; init; }
+    public string Endereco { get; init; }
 }
