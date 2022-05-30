@@ -15,17 +15,15 @@ public class UsuarioRepository : IUsuarioRepository
 
     public Usuario Create(Usuario usuario, string senha)
     {
-        var dataCadastro = DateOnly.FromDateTime(DateTime.Today);
-
         using var command = commandFactory.Create("INSERT INTO Usuarios(Login, Senha, Data_Cadastro, Ativo) OUTPUT INSERTED.Id VALUES (@Login, @Senha, @Data_Cadastro, @Ativo)");
         command.AddParameter("@Login", usuario.Login);
-        command.AddParameter("@Senha", BCrypt.Net.BCrypt.HashPassword(senha));
-        command.AddParameter("@Data_Cadastro", dataCadastro);
+        command.AddParameter("@Senha", senha);
+        command.AddParameter("@Data_Cadastro", DateTime.Today);
         command.AddParameter("@Ativo", true);
 
         var id = command.ExecuteScalar<int>();
 
-        return usuario with { Id = id, DataCadastro = dataCadastro, Ativo = true };
+        return usuario with { Id = id, DataCadastro = DateOnly.FromDateTime(DateTime.Today), Ativo = true };
     }
 
     public Usuario Get(int id)
@@ -39,13 +37,10 @@ public class UsuarioRepository : IUsuarioRepository
         return new();
     }
 
-    public Usuario Get(string login, string senha)
+    public Usuario Get(string login)
     {
-        senha = BCrypt.Net.BCrypt.HashPassword(senha);
-
-        using var command = commandFactory.Create("SELECT * FROM Usuarios WHERE Login = @Login AND Senha = @Senha AND Ativo = @Ativo");
+        using var command = commandFactory.Create("SELECT * FROM Usuarios WHERE Login = @Login AND Ativo = @Ativo");
         command.AddParameter("@Login", login);
-        command.AddParameter("@Senha", senha);
         command.AddParameter("@Ativo", true);
         using var reader = command.ExecuteReader();
 
@@ -89,6 +84,7 @@ public class UsuarioRepository : IUsuarioRepository
         {
             Id = reader.GetInt32(0),
             Login = reader.GetString(1),
+            Password = reader.GetString(2),
             DataCadastro = DateOnly.FromDateTime(reader.GetDateTime(3)),
             Ativo = reader.GetBoolean(4)
         };

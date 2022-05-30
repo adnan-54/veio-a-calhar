@@ -1,11 +1,16 @@
 using System.Data.SqlClient;
 using VeioACalhar.Commands;
+using VeioACalhar.Middlewares;
 using VeioACalhar.Repositories;
+using VeioACalhar.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddTransient(provider => new SqlConnection(connectionString));
 builder.Services.AddTransient<ISqlCommandFactory, SqlCommandFactory>();
@@ -30,13 +35,13 @@ builder.Services.AddSingleton<IVendaRepository, VendaRepository>();
 builder.Services.AddSingleton<IVendaClienteRepository, VendaClienteRepository>();
 builder.Services.AddSingleton<IVendaFuncionarioRepository, VendaFuncionarioRepository>();
 builder.Services.AddSingleton<ICompraRepository, CompraRepository>();
+builder.Services.AddSingleton<IUserService, UserSerivce>();
 
 var app = builder.Build();
 
 app.UseExceptionHandler("/Home/Error");
-
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseSession();
+app.UseMiddleware<LoginRequiredMiddleware>();
 
 app.MapDefaultControllerRoute();
 app.Run();
