@@ -8,7 +8,7 @@ public interface IUsuarioRepository
 
     Usuario Get(int id);
 
-    Usuario Get(string login, string senha);
+    Usuario Get(string login);
 
     IReadOnlyCollection<Usuario> GetAll();
 
