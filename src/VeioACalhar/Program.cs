@@ -9,8 +9,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
-
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddMvc();
 
 builder.Services.AddTransient(provider => new SqlConnection(connectionString));
 builder.Services.AddTransient<ISqlCommandFactory, SqlCommandFactory>();
@@ -41,7 +41,9 @@ var app = builder.Build();
 
 app.UseExceptionHandler("/Home/Error");
 app.UseSession();
+
 app.UseMiddleware<LoginRequiredMiddleware>();
+app.UseMiddleware<NotFoundMiddleware>();
 
 app.MapDefaultControllerRoute();
 app.Run();

@@ -61,7 +61,7 @@ public class FornecedoresController : Controller
         var fornecedor = fornecedorRepository.Get(id);
         if (fornecedor.Id > 0)
             return View(fornecedor);
-        return View("NotFound");
+        return NotFound();
     }
 
     public IActionResult Edit(int id)
@@ -69,7 +69,7 @@ public class FornecedoresController : Controller
         var fornecedor = fornecedorRepository.Get(id);
         if (fornecedor.Id > 0)
             return View(fornecedor);
-        return View("NotFound");
+        return NotFound();
     }
 
     [HttpPost]
@@ -100,7 +100,7 @@ public class FornecedoresController : Controller
         var fornecedor = fornecedorRepository.Get(id);
         if (fornecedor.Id > 0)
             return View(fornecedor);
-        return View("NotFound");
+        return NotFound();
     }
 
     [HttpPost]

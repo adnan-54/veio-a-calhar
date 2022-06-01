@@ -37,7 +37,7 @@ public class ClienteRepository : IClienteRepository
 
     public IReadOnlyCollection<Cliente> GetAll()
     {
-        using var command = commandFactory.Create("SELECT * FROM Clientes_Fisicos");
+        using var command = commandFactory.Create("SELECT * FROM Clientes");
         using var reader = command.ExecuteReader();
 
         var ids = new List<int>();
@@ -54,7 +54,7 @@ public class ClienteRepository : IClienteRepository
 
     public void Delete(Cliente cliente)
     {
-        using var command = commandFactory.Create("DELETE FROM Clientes_Fisicos WHERE Id = @Id");
+        using var command = commandFactory.Create("DELETE FROM Clientes WHERE Id = @Id");
         command.AddParameter("@Id", cliente.Id);
         command.ExecuteNonQuery();
         pessoaRepository.Delete(cliente);
