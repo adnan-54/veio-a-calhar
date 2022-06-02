@@ -1,0 +1,57 @@
+﻿@model Produto
+
+@{
+    ViewData["Title"] = "Deletar Produto";
+}
+
+<div class="d-flex flex-column">
+    <div class="alert alert-warning" role="alert">
+        <h1>@ViewData["Title"]</h1>
+
+        <div>
+            <h4>@Model.Nome</h4>
+
+            <hr />
+
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Nome)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Nome)
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Fornecedor)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Fornecedor.Nome)
+                </dd>
+
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Descricao)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Descricao)
+                </dd>
+            </dl>
+        </div>
+
+        <p>
+            Essa ação é permanente e não pode ser desfeita.
+        </p>
+    </div>
+
+    <form asp-action="Delete">
+        @Html.ActionLink("Voltar", "Index", new{ }, new { @class = "btn btn-outline-secondary", @style="width: 100px" })
+
+        <input type="submit" value="Deletar" class="btn btn-danger" style="width: 100px" />
+    </form>
+</div>
