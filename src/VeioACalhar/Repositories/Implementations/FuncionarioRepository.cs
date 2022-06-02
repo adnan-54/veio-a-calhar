@@ -9,24 +9,29 @@ public class FuncionarioRepository : IFuncionarioRepository
     private readonly ISqlCommandFactory commandFactory;
     private readonly ICargoRepository cargoRepository;
     private readonly IUsuarioRepository usuarioRepository;
+    private readonly IPessoaFisicaRepository<Funcionario> pessoaFisicaRepository;
 
-    public FuncionarioRepository(ISqlCommandFactory commandFactory, ICargoRepository cargoRepository, IUsuarioRepository usuarioRepository)
+    public FuncionarioRepository(ISqlCommandFactory commandFactory, ICargoRepository cargoRepository, IUsuarioRepository usuarioRepository, IPessoaFisicaRepository<Funcionario> pessoaFisicaRepository)
     {
         this.commandFactory = commandFactory;
         this.cargoRepository = cargoRepository;
         this.usuarioRepository = usuarioRepository;
+        this.pessoaFisicaRepository = pessoaFisicaRepository;
     }
 
     public Funcionario Create(Funcionario funcionario)
     {
-        using var command = commandFactory.Create("INSERT INTO Funcionarios(Id_Cargo, Id_Usuario, Salario) OUTPUT INSERTED.Id VALUES (@Id_Cargo, @Id_Usuario, @Salario)");
+        funcionario = pessoaFisicaRepository.Create(funcionario);
+
+        using var command = commandFactory.Create("INSERT INTO Funcionarios(Id, Id_Cargo, Id_Usuario, Salario) VALUES (@Id, @Id_Cargo, @Id_Usuario, @Salario)");
+        command.AddParameter("@Id", funcionario.Id);
         command.AddParameter("@Id_Cargo", funcionario.Cargo.Id);
         command.AddParameter("@Id_Usuario", funcionario.Usuario.Id);
         command.AddParameter("@Salario", funcionario.Salario);
 
-        var id = command.ExecuteScalar<int>();
+        command.ExecuteNonQuery();
 
-        return funcionario with { Id = id };
+        return funcionario;
     }
 
     public Funcionario Get(int id)
@@ -53,6 +58,8 @@ public class FuncionarioRepository : IFuncionarioRepository
 
     public Funcionario Update(Funcionario funcionario)
     {
+        funcionario = pessoaFisicaRepository.Update(funcionario);
+
         using var command = commandFactory.Create("UPDATE Funcionarios SET Id_Cargo = @Id_Cargo, Id_Usuario = @Id_Usuario, Salario = @Salario WHERE Id = @Id");
         command.AddParameter("@Id", funcionario.Id);
         command.AddParameter("@Id_Cargo", funcionario.Cargo.Id);
@@ -68,16 +75,19 @@ public class FuncionarioRepository : IFuncionarioRepository
         using var command = commandFactory.Create("DELETE FROM Funcionarios WHERE Id = @Id");
         command.AddParameter("@Id", funcionario.Id);
         command.ExecuteNonQuery();
+
+        pessoaFisicaRepository.Delete(funcionario);
     }
 
     private Funcionario CreateFuncionario(SqlDataReader reader)
     {
-        return new()
+        var id = reader.GetInt32(0);
+        var cargo = pessoaFisicaRepository.Get(id);
+        return cargo with
         {
-            Id = reader.GetInt32(0),
             Cargo = cargoRepository.Get(reader.GetInt32(1)),
             Usuario = usuarioRepository.Get(reader.GetInt32(2)),
-            Salario = reader.GetDecimal(3)
+            Salario = reader.GetSqlMoney(3).ToDecimal()
         };
     }
 }

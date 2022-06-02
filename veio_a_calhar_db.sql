@@ -50,7 +50,7 @@ CREATE TABLE Funcionarios(
 	Id INT PRIMARY KEY REFERENCES Pessoas_Fisicas(Id),
 	Id_Cargo INT FOREIGN KEY REFERENCES Cargos(Id),
 	Id_Usuario INT FOREIGN KEY REFERENCES Usuarios(Id),
-	Salario INT NOT NULL
+	Salario MONEY NOT NULL
 )
 
 CREATE TABLE Fornecedores(
@@ -99,7 +99,7 @@ CREATE TABLE Pagamentos(
 )
 
 CREATE TABLE Parcelas(
-	Id INT PRIMARY KEY IDEClientesNTITY,
+	Id INT PRIMARY KEY IDENTITY,
 	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
 	Numero INT NOT NULL,
 	Valor MONEY NOT NULL,
