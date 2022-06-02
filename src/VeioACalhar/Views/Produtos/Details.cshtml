@@ -1,0 +1,70 @@
+﻿@model Produto
+
+@{
+    ViewData["Title"] = "Detalhes do Produto";
+}
+
+<div class="d-flex flex-column">
+    <h1>@ViewData["Title"]</h1>
+
+    <hr />
+
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Nome)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nome)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Fornecedor)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Fornecedor.Nome)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PrecoCusto)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PrecoCusto)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PrecoVenda)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PrecoVenda)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Quantidade)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Quantidade)
+                @Html.DisplayFor(model => model.Unidade.Sigla)
+            </dd>
+
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Descricao)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Descricao)
+            </dd>
+        </dl>
+    </div>
+
+    <div>
+        @Html.ActionLink("Voltar", "Index", new{ }, new { @class = "btn btn-outline-secondary", @style="width: 100px" })
+        @Html.ActionLink("Editar", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary", @style="width: 100px" })
+    </div>
+</div>
