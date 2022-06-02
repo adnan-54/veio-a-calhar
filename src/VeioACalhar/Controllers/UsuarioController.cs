@@ -39,7 +39,8 @@ public class UsuarioController : Controller
         }
     }
 
-    public IActionResult SignOut()
+    [Route("Usuario/SignOut")]
+    public IActionResult UserSignOut()
     {
         userService.SignOut();
         return RedirectToAction(nameof(HomeController.Index), "Home");
