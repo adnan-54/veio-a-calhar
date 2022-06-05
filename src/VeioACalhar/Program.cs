@@ -8,9 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddMvc();
 
 builder.Services.AddTransient(provider => new SqlConnection(connectionString));
 builder.Services.AddTransient<ISqlCommandFactory, SqlCommandFactory>();
@@ -39,11 +39,24 @@ builder.Services.AddSingleton<IUserService, UserSerivce>();
 
 var app = builder.Build();
 
-app.UseExceptionHandler("/Home/Error");
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
+
 app.UseSession();
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.UseMiddleware<LoginRequiredMiddleware>();
 app.UseMiddleware<NotFoundMiddleware>();
 
-app.MapDefaultControllerRoute();
 app.Run();
