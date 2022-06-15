@@ -6,7 +6,7 @@ public interface IVendaClienteRepository
 {
     void CreateFor(Venda venda);
 
-    IReadOnlyCollection<Pessoa> GetFor(Venda venda);
+    IReadOnlyCollection<Cliente> GetFor(Venda venda);
 
     void UpdateFor(Venda venda);
 

@@ -42,6 +42,8 @@ public sealed class SqlCommandWrapper : ISqlCommand
 
     public void AddParameter(string parameterName, object? value)
     {
+        if (value is null)
+            value = DBNull.Value;
         command.Parameters.AddWithValue(parameterName, value);
     }
 

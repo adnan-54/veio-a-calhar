@@ -27,8 +27,8 @@ public class ProdutoTransacaoRepository : IProdutoTransacaoRepository
 
     public IReadOnlyCollection<ProdutoTransacao> GetFor(Transacao transacao)
     {
-        using var command = commandFactory.Create("SELECT * FROM Produtos_Transacoes WHERE Id_Transacao = @Id_Transacao");
-        command.AddParameter("@Id_Transacao", transacao.Id);
+        using var command = commandFactory.Create("SELECT * FROM Transacoes_Produtos WHERE Id_Transacoes = @Id_Transacoes");
+        command.AddParameter("@Id_Transacoes", transacao.Id);
 
         using var reader = command.ExecuteReader();
 
@@ -48,15 +48,15 @@ public class ProdutoTransacaoRepository : IProdutoTransacaoRepository
 
     public void DeleteFor(Transacao transacao)
     {
-        using var command = commandFactory.Create("DELETE FROM Produtos_Transacoes WHERE Id_Transacao = @Id_Transacao");
-        command.AddParameter("@Id_Transacao", transacao.Id);
+        using var command = commandFactory.Create("DELETE FROM Transacoes_Produtos WHERE Id_Transacoes = @Id_Transacoes");
+        command.AddParameter("@Id_Transacoes", transacao.Id);
 
         command.ExecuteNonQuery();
     }
 
     private ProdutoTransacao Create(ProdutoTransacao produto, Transacao transacao)
     {
-        using var command = commandFactory.Create("INSERT INTO Produtos_Transacoes (Id_Transacoes, Id_Produto, Quantidade, Valor_Unitario, Desconto_Unitario) VALUES (@Id_Transacoes, @Id_Produto, @Quantidade, @Valor_Unitario, @Desconto_Unitario)");
+        using var command = commandFactory.Create("INSERT INTO Transacoes_Produtos (Id_Transacoes, Id_Produto, Quantidade, Valor_Unitario, Desconto_Unitario) OUTPUT INSERTED.Id VALUES (@Id_Transacoes, @Id_Produto, @Quantidade, @Valor_Unitario, @Desconto_Unitario)");
         command.AddParameter("@Id_Transacoes", transacao.Id);
         command.AddParameter("@Id_Produto", produto.Produto.Id);
         command.AddParameter("@Quantidade", produto.Quantidade);

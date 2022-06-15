@@ -1,0 +1,44 @@
+﻿@model FinalizarVendaViewModel
+
+@{
+    ViewData["Title"] = "Finalizar Venda";
+
+    var venda = ViewBag.Venda as Venda ?? new();
+}
+
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-end">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <hr />
+
+    <form asp-action="FinalizarOrdem" method="post" class="input-group">
+        <div class="col-md-5 d-flex flex-column gap-2">
+            <input id="idVenda" name="idVenda" value="@venda.Id" hidden/>
+
+            <div class="form-group">
+                <label asp-for="Pagador" class="control-label"></label>
+                <select asp-items="Model.Pagadores" asp-for="Pagador" class="form-control"></select>
+                <span asp-validation-for="Pagador" class="text-danger"></span>
+            </div>
+        
+            <div class="form-group">
+                <label asp-for="FormaPagamento" class="control-label"></label>
+                <select asp-items="Model.FormasPagamento" asp-for="FormaPagamento" class="form-control"></select>
+                <span asp-validation-for="FormaPagamento" class="text-danger"></span>
+            </div>
+
+             <div class="form-group">
+                <label asp-for="ValorRecebido" class="control-label"></label>
+                <input asp-for="ValorRecebido" class="form-control"/>
+                <span asp-validation-for="ValorRecebido" class="text-danger"></span>
+            </div>
+
+            <div>
+                @Html.ActionLink("Voltar", "Edit", new { id = venda.Id }, new { @class = "btn btn-primary", @style = "min-width: 100px" })
+                <button class="btn btn-primary" style="min-width: 100px" type="submit">Finalizar</button>
+            </div>
+        </div>
+    </form>
+</div>

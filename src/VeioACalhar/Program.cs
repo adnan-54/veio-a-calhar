@@ -1,4 +1,4 @@
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using VeioACalhar.Commands;
 using VeioACalhar.Middlewares;
 using VeioACalhar.Repositories;
@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddControllersWithViews();
+builder.Services.AddMvc();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
 
@@ -35,6 +35,7 @@ builder.Services.AddSingleton<IVendaRepository, VendaRepository>();
 builder.Services.AddSingleton<IVendaClienteRepository, VendaClienteRepository>();
 builder.Services.AddSingleton<IVendaFuncionarioRepository, VendaFuncionarioRepository>();
 builder.Services.AddSingleton<ICompraRepository, CompraRepository>();
+builder.Services.AddSingleton<ITransacaoRepository, TransacaoRepository>();
 builder.Services.AddSingleton<IUserService, UserSerivce>();
 
 var app = builder.Build();

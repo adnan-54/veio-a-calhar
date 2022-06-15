@@ -4,8 +4,11 @@ public record StatusTransacao : Entidade
 {
     public StatusTransacao()
     {
-        Status = string.Empty;
+        Id = 1;
+        Status = "Orçamento";
     }
 
     public string Status { get; init; }
+
+    public bool EmAberto => Id == 1 || Id == 2;
 }
