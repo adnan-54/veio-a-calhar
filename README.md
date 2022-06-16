@@ -28,10 +28,7 @@ dotnet run
 ```
 
 ## Integrantes
-Adnan
-
-Lance
-
-Lauro
-
-Taylor
+- Adnan Silva Pedroso
+- Lance Armstrong Ferreira
+- Lauro Luis Zarpelao Precioso
+- Taylor Rayan de Araujo Fernandes
