@@ -22,11 +22,11 @@ public class VendaRepository : IVendaRepository
     public Venda Create(Venda venda)
     {
         venda = transacaoRepository.Create(venda);
-        
+
         using var command = commandFactory.Create("INSERT INTO Vendas (Id, Previsao_Inicio, Previsao_Entrega) VALUES (@Id, @Previsao_Inicio, @Previsao_Entrega)");
         command.AddParameter("@Id", venda.Id);
-        command.AddParameter("@Previsao_Inicio", venda.PrevisaoInicio);
-        command.AddParameter("@Previsao_Entrega", venda.PrevisaoEntrega);
+        command.AddParameter("@Previsao_Inicio", venda.PrevisaoInicio?.ToDateTime(default));
+        command.AddParameter("@Previsao_Entrega", venda.PrevisaoEntrega?.ToDateTime(default));
         command.ExecuteNonQuery();
 
         vendaClienteRepository.CreateFor(venda);
@@ -40,12 +40,12 @@ public class VendaRepository : IVendaRepository
         using var command = commandFactory.Create("SELECT * FROM Vendas WHERE Id = @Id");
         command.AddParameter("@Id", id);
         using var reader = command.ExecuteReader();
-        
-        if(reader.Read())
+
+        if (reader.Read())
             return CreateVenda(reader);
         return new();
     }
-    
+
     public IReadOnlyCollection<Venda> GetAll()
     {
         using var command = commandFactory.Create("SELECT * FROM Vendas");
@@ -62,8 +62,8 @@ public class VendaRepository : IVendaRepository
         venda = transacaoRepository.Update(venda);
         using var command = commandFactory.Create("UPDATE Vendas SET Previsao_Inicio = @Previsao_Inicio, Previsao_Entrega = @Previsao_Entrega WHERE Id = @Id");
         command.AddParameter("@Id", venda.Id);
-        command.AddParameter("@Previsao_Inicio", venda.PrevisaoInicio);
-        command.AddParameter("@Previsao_Entrega", venda.PrevisaoEntrega);
+        command.AddParameter("@Previsao_Inicio", venda.PrevisaoInicio?.ToDateTime(default));
+        command.AddParameter("@Previsao_Entrega", venda.PrevisaoEntrega?.ToDateTime(default));
         command.ExecuteNonQuery();
 
         vendaClienteRepository.UpdateFor(venda);
@@ -91,8 +91,8 @@ public class VendaRepository : IVendaRepository
 
         return venda with
         {
-            PrevisaoInicio = DateOnly.FromDateTime(reader.GetDateTime(1)),
-            PrevisaoEntrega = DateOnly.FromDateTime(reader.GetDateTime(2)),
+            PrevisaoInicio = reader.IsDBNull(1) ? null : DateOnly.FromDateTime(reader.GetDateTime(1)),
+            PrevisaoEntrega = reader.IsDBNull(2) ? null : DateOnly.FromDateTime(reader.GetDateTime(2)),
             Clientes = vendaClienteRepository.GetFor(venda),
             Funcionarios = vendaFuncionarioRepository.GetFor(venda)
         };

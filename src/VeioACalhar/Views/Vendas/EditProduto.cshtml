@@ -1,0 +1,113 @@
+﻿@model ProdutoTransacao
+
+@{
+    if(Model.Id == 0)
+    {
+        ViewData["Title"] = "Adicionar Produto";
+    }
+    else
+    {
+        ViewData["Title"] = "Editar Produto";
+    }
+
+    var venda = ViewBag.Venda as Venda ?? new();
+}
+
+<script src="~/lib\jquery\dist\jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        const format = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const quantidade = document.getElementById("Quantidade");
+        const valorUnitario = document.getElementById("ValorUnitario");
+        const descontoUnitario = document.getElementById("DescontoUnitario");
+        const valorTotal = document.getElementById("ValorTotal");
+
+        quantidade.addEventListener('input', updateValorTotal);
+        valorUnitario.addEventListener('input', updateValorTotal);
+        descontoUnitario.addEventListener('input', updateValorTotal);
+
+        updateValorTotal(null);
+
+        function updateValorTotal(e) {
+            const valor = getValorTotal({ quantidade: quantidade.value, valorUnitario: valorUnitario.value, descontoUnitario: descontoUnitario.value });
+            valorTotal.innerText = format.format(valor);
+        }
+
+        function getValorTotal(values) {
+            const quantidade = parseFloat(values.quantidade);
+            const valorUnitario = parseFloat(values.valorUnitario);
+            const descontoUnitario = parseFloat(values.descontoUnitario);
+
+            if (isNaN(quantidade) || isNaN(valorUnitario) || isNaN(descontoUnitario))
+                return 0.0;
+
+            return (valorUnitario - valorUnitario * descontoUnitario / 100) * quantidade;
+        }
+    });
+
+
+ 
+</script>
+
+<div class="d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-end">
+        <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <hr />
+
+    <h4>@Model.Produto.Nome</h4>
+
+    <form asp-action="EditProduto" method="post">
+        <div class="d-flex flex-column">
+            <div class="col-md-5">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <input id="IdVenda" name="IdVenda" value="@venda.Id" hidden />
+
+                <input id="IdProduto" name="IdProduto" value="@Model.Produto.Id" hidden />
+
+                <input asp-for="Id" hidden />
+
+                <div class="form-group">
+                    <label asp-for="Quantidade" class="control-label">Quantidade (@Model.Produto.Unidade.Sigla)</label>
+                    <input asp-for="Quantidade" class="form-control" />
+                    <span asp-validation-for="Quantidade" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ValorUnitario" class="control-label">Valor Unitario (R$)</label>
+                    <input asp-for="ValorUnitario" min="0" max="@Model.Produto.Quantidade" class="form-control"/>
+                    <span asp-validation-for="ValorUnitario" class="text-danger"></span>
+                </div>
+
+                 <div class="form-group">
+                    <label asp-for="DescontoUnitario" class="control-label">Desconto Unitário (%)</label>
+                    <input asp-for="DescontoUnitario" class="form-control" min="0" max="100"/>
+                    <span asp-validation-for="DescontoUnitario" class="text-danger"></span>
+                </div>
+
+                <div class="form-group h5 mt-2">
+                    <label asp-for="ValorTotal" class="control-label">Valor Total: R$</label>
+                    <span id="ValorTotal" class="">0,00</span>
+                </div>
+            </div>
+
+            <div class="d-flex mt-3">
+                <a asp-action="Index" class="btn btn-outline-secondary" style="width: 100px">Cancelar</a>
+
+                @{var label = Model.Id == 0 ? "Adicionar" : "Editar"; }
+
+                <input type="submit" class="btn btn-primary mx-2" style="width: 100px" value="@label" />
+            </div>
+        </div>
+    </form>
+</div>
+
+                    
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

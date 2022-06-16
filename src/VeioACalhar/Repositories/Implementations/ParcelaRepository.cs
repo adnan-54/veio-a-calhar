@@ -56,8 +56,8 @@ public class ParcelaRepository : IParcelaRepository
         command.AddParameter("@Valor", parcela.Valor);
         command.AddParameter("@Porcentagem_Desconto", parcela.PorcentagemDesconto);
         command.AddParameter("@Valor_Pago", parcela.ValorPago);
-        command.AddParameter("@Data_Vencimento", parcela.DataVencimento);
-        command.AddParameter("@Data_Pagamento", parcela.DataPagamento);
+        command.AddParameter("@Data_Vencimento", parcela.DataVencimento.ToDateTime(default));
+        command.AddParameter("@Data_Pagamento", parcela.DataPagamento.ToDateTime(default));
 
         var id = command.ExecuteScalar<int>();
 

@@ -2,37 +2,31 @@
 
 @inject IUserService userService;
 
+@{
+    var title = ViewData["Title"] as string;
+    if (!string.IsNullOrEmpty(title))
+        title = $"{title} - Veio A Calhar";
+    else
+        title = "Veio A Calhar";
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VeioACalhar</title>
+    <title>@title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VeioACalhar.styles.css" asp-append-version="true" />
-
-    <style>
-        .header {
-            background-color: #f1f1f1;
-            font-size: 20px;
-        }
-
-        .menu li a {
-            border-radius: 5px;
-            color: black;
-        }
-
-            .menu li a:hover {
-                background-color: #0d6efd;
-                color: #ffffff;
-            }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="m-0">
     <div class="d-flex flex-column" style="min-height: 100vh">
-        <header class="header">
-            <div class="container d-flex justify-content-between py-3">
+        <header class="shadow-sm py-3 border-bottom">
+            <div class="container d-flex justify-content-between align-items-center">
                 <a href="/" class="text-dark">
                     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z" />
@@ -40,34 +34,39 @@
                     </svg>
                 </a>
 
-                <ul class="nav menu">
-                    <li><a class="nav-link link" href="/funcionarios">Funcionários</a></li>
-                    <li><a class="nav-link link" href="/clientes">Clientes</a></li>
-                    <li><a class="nav-link link" href="/fornecedores">Fornecedores</a></li>
-                    <li><a class="nav-link link" href="/produtos">Produtos</a></li>
-                    <li><a class="nav-link link" href="#">Vendas</a></li>
-
-                    <li class="dropdown">
-                        <a class="nav-link link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Mais
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item nav-link link" href="#">Compras</a></li>
-                        </ul>
-                    </li>
-                </ul>
-
                 @if (userService.CurrentUser.Id == 0)
                 {
-                    <div>
-                        <a type="button" class="btn btn-outline-primary" href="\usuario\signin">Sign in</a>
-                        <a type="button" class="btn btn-primary" href="\usuario\signup">Sign up</a>
+
+                    <h2 class="text-center fw-bold">Veio A Calhar</h2>
+
+                    <div class="btn-group">
+                        @Html.ActionLink("Entrar", "Signin", "Usuario", null, new { @class = "btn btn-outline-primary"})
+                        @Html.ActionLink("Cadastrar-se", "Signup", "Usuario", null, new { @class = "btn btn-primary"})
                     </div>
                 }
                 else
                 {
+                    <div class="d-flex gap-2" role="group">
+                        @Html.ActionLink("Funcionários", "Index", "Funcionarios", null, new { @class = "btn btn-primary"})
+                        @Html.ActionLink("Clientes", "Index", "Clientes", null, new { @class = "btn btn-primary"})
+                        @Html.ActionLink("Fornecedores", "Index", "Fornecedores", null, new { @class = "btn btn-primary"})
+                        @Html.ActionLink("Produtos", "Index", "Produtos", null, new { @class = "btn btn-primary"})
+                   
+                    
+                        <div class="btn-group">
+                            @Html.ActionLink("Vendas", "Index", "Vendas", null, new { @class = "btn btn-primary"})
+                            <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                            <div class="dropdown-menu">
+                                @Html.ActionLink("Orçamentos", "Index", "Vendas", new { status = "orcamento" }, new { @class = "dropdown-item"})
+                                @Html.ActionLink("Em Aberto", "Index", "Vendas", new { status = "emaberto" }, new { @class = "dropdown-item"})
+                                @Html.ActionLink("Finalizadas", "Index", "Vendas", new { status = "finalizada" }, new { @class = "dropdown-item"})
+                                @Html.ActionLink("Canceladas", "Index", "Vendas", new { status = "cancelada" }, new { @class = "dropdown-item"})
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
-                        <a type="button" class="btn btn-outline-primary" href="\usuario\signout">Sign out</a>
+                        @Html.ActionLink("Sair", "signout", "Usuario", null, new { @class = "btn btn-outline-primary", @style = "min-width: 80px"})
                     </div>
                 }
             </div>
@@ -77,8 +76,8 @@
             @RenderBody()
         </div>
 
-        <footer class="">
-            <p class="text-center text-muted justify-content-center">©@DateTime.Now.Year Zero Três Calhas e Rufos</p>
+        <footer class="shadow-lg py-3 border-top">
+            <p class="text-center m-0 text-monospace">©@DateTime.Now.Year Zero Três Calhas e Rufos</p>
         </footer>
     </div>
 

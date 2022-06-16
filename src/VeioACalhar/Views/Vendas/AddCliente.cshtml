@@ -1,16 +1,14 @@
-﻿@model IEnumerable<Produto>
+﻿@model IEnumerable<Cliente>
 
 @{
-    ViewData["Title"] = "Produtos";
+    ViewData["Title"] = "Adicionar Cliente";
+
+    var venda = ViewBag.Venda as Venda ?? new();
 }
 
 <div class="d-flex flex-column">
     <div class="d-flex justify-content-between align-items-end">
         <h1>@ViewData["Title"]</h1>
-
-        <p>
-            <a asp-action="Create" class="btn btn-primary">Criar Novo</a>
-        </p>
     </div>
 
     <hr />
@@ -23,7 +21,7 @@
     @if (!Model.Any())
     {
         <div class="alert alert-warning mt-3" role="alert">
-            Nenhum produto encontrado.
+            Nenhum cliente encontrado.
         </div>
     }
     else
@@ -39,12 +37,12 @@
                         @Html.DisplayNameFor(model => model.Nome)
                     </th>
 
-                    <th scope="col" class="col-1">
-                        @Html.DisplayNameFor(model => model.Quantidade)
+                    <th scope="col" class="col-2">
+                        @Html.DisplayNameFor(model => model.Telefone)
                     </th>
 
-                    <th scope="col" class="col-1">
-                        @Html.DisplayNameFor(model => model.PrecoVenda)
+                    <th scope="col" class="col-2">
+                        @Html.DisplayNameFor(model => model.Pix)
                     </th>
 
                     <th scope="col" class="col-2">
@@ -53,34 +51,33 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var produto in Model)
+                @foreach (var cliente in Model)
                 {
                     <tr>
                         <td scope="row">
-                            @Html.DisplayFor(item => produto.Id)
+                            @Html.DisplayFor(model => cliente.Id)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(item => produto.Nome)
+                            @Html.DisplayFor(model => cliente.Nome)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(item => produto.Quantidade)
-                            @Html.DisplayFor(item => produto.Unidade.Sigla)
+                            @Html.DisplayFor(model => cliente.Telefone)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(item => produto.PrecoVenda)
+                            @Html.DisplayFor(model => cliente.Pix)
                         </td>
 
                         <td>
-                            @Html.ActionLink("Detalhes", "Details", new { id=produto.Id }) |
-                            @Html.ActionLink("Editar", "Edit", new {  id=produto.Id  }) |
-                            @Html.ActionLink("Deletar", "Delete", new { id=produto.Id })
+                            @Html.ActionLink("Adicionar", "AddClienteTo", new { idVenda = venda.Id, idCliente = cliente.Id }, new { @class = "btn btn-outline-primary py-0" })
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
+
+    @Html.ActionLink("Voltar", "Edit", new { id = venda.Id }, new { @class = "btn btn-primary" })
 </div>

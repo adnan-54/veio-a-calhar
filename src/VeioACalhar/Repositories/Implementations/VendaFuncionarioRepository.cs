@@ -22,7 +22,7 @@ public class VendaFuncionarioRepository : IVendaFuncionarioRepository
 
     public IReadOnlyCollection<Funcionario> GetFor(Venda venda)
     {
-        using var command = commandFactory.Create("SELECT * FROM Venda_Funcionarios WHERE Id_Venda = @Id_Venda");
+        using var command = commandFactory.Create("SELECT * FROM Vendas_Funcionarios WHERE Id_Venda = @Id_Venda");
         command.AddParameter("@Id_Venda", venda.Id);
         using var reader = command.ExecuteReader();
 
@@ -40,14 +40,14 @@ public class VendaFuncionarioRepository : IVendaFuncionarioRepository
 
     public void DeleteFor(Venda venda)
     {
-        using var command = commandFactory.Create("DELETE FROM Venda_Funcionarios WHERE Id_Venda = @Id_Venda");
+        using var command = commandFactory.Create("DELETE FROM Vendas_Funcionarios WHERE Id_Venda = @Id_Venda");
         command.AddParameter("@Id_Venda", venda.Id);
         command.ExecuteNonQuery();
     }
 
     private void Create(Funcionario funcionario, Venda venda)
     {
-        using var command = commandFactory.Create("INSERT INTO Venda_Funcionarios (Id_Venda, Id_Funcionario) VALUES (@Id_Venda, @Id_Funcionario)");
+        using var command = commandFactory.Create("INSERT INTO Vendas_Funcionarios (Id_Venda, Id_Funcionario) VALUES (@Id_Venda, @Id_Funcionario)");
         command.AddParameter("@Id_Venda", venda.Id);
         command.AddParameter("@Id_Funcionario", funcionario.Id);
         command.ExecuteNonQuery();

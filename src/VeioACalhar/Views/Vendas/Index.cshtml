@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Produto>
+﻿@model IEnumerable<Venda>
 
 @{
-    ViewData["Title"] = "Produtos";
+    ViewData["Title"] = "Vendas";
 }
 
 <div class="d-flex flex-column">
@@ -9,7 +9,7 @@
         <h1>@ViewData["Title"]</h1>
 
         <p>
-            <a asp-action="Create" class="btn btn-primary">Criar Novo</a>
+            <a asp-action="Create" class="btn btn-primary">Criar Nova</a>
         </p>
     </div>
 
@@ -23,7 +23,7 @@
     @if (!Model.Any())
     {
         <div class="alert alert-warning mt-3" role="alert">
-            Nenhum produto encontrado.
+            Nenhuma venda encontrada.
         </div>
     }
     else
@@ -36,15 +36,19 @@
                     </th>
 
                     <th scope="col">
-                        @Html.DisplayNameFor(model => model.Nome)
+                        @Html.DisplayNameFor(model => model.Clientes)
                     </th>
 
                     <th scope="col" class="col-1">
-                        @Html.DisplayNameFor(model => model.Quantidade)
+                        @Html.DisplayNameFor(model => model.DataCriacao)
                     </th>
 
                     <th scope="col" class="col-1">
-                        @Html.DisplayNameFor(model => model.PrecoVenda)
+                        @Html.DisplayNameFor(model => model.Produtos)
+                    </th>
+
+                    <th scope="col" class="col-1">
+                        @Html.DisplayNameFor(model => model.Status)
                     </th>
 
                     <th scope="col" class="col-2">
@@ -53,30 +57,35 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var produto in Model)
+                @foreach (var venda in Model)
                 {
                     <tr>
                         <td scope="row">
-                            @Html.DisplayFor(item => produto.Id)
+                            @Html.DisplayFor(item => venda.Id)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(item => produto.Nome)
+                            @{var clientes = string.Join(",", venda.Clientes.Select(c => c.Nome));}
+                            @Html.DisplayFor(item => clientes)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(item => produto.Quantidade)
-                            @Html.DisplayFor(item => produto.Unidade.Sigla)
+                            @{var data = venda.DataCriacao.ToShortDateString();}
+                            @Html.DisplayFor(item => data)
                         </td>
 
                         <td>
-                            @Html.DisplayFor(item => produto.PrecoVenda)
+                            @{var count = venda.Produtos.Count();}
+                            @Html.DisplayFor(item => count)
                         </td>
 
                         <td>
-                            @Html.ActionLink("Detalhes", "Details", new { id=produto.Id }) |
-                            @Html.ActionLink("Editar", "Edit", new {  id=produto.Id  }) |
-                            @Html.ActionLink("Deletar", "Delete", new { id=produto.Id })
+                            @Html.DisplayFor(item => venda.Status.Status)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Editar", "Edit", new { id = venda.Id }) |
+                            @Html.ActionLink("Deletar", "Delete", new { id = venda.Id })
                         </td>
                     </tr>
                 }

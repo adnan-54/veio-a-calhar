@@ -1,37 +1,155 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@using VeioACalhar.Repositories
+@using VeioACalhar.Services
+
+@inject IUserService userService;
+@inject IVendaRepository vendaRepository;
+
+@{
+    var vendas = vendaRepository.GetAll().OrderByDescending(v => v.DataCriacao);
+    var orcamentos = vendas.Where(v => v.Status.Id == 1).Take(10);
+    var emAberto = vendas.Where(v => v.Status.Id == 2).Take(10);
 }
 
-<div class="container text-center">
-    <div>
-        <h1 class="mb-4">Seja bem vindo!</h1>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Contas à Pagar</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
+<div class="d-flex flex-column">
+    <h1 class="m-0">Bem vindo, <span class="text-info">@userService.CurrentUser.Login</span>.</h1>
+
+    <h5 class="text-capitalize m-0">@DateTime.Now.ToLongDateString()</h5>
+
+    <hr class=""/>
+
+    <div class="d-flex gap-2">
+        <div class="card flex-grow-1 w-50 shadow-sm" style="min-height: 300px">
+            <div class="card-body d-flex flex-column gap-3">
+                <h5 class="card-title m-0">Orçamentos</h5>
+                
+                @if(orcamentos.Any())
+                {
+                    <div class="border flex-grow-1">
+                        <table class="table table-hover table-sm">
+                            <thead>
+                           
+                                <tr>
+                                    <th scope="col" class="col-5">
+                                        Clientes
+                                    </th>
+
+                                    <th scope="col">
+                                        Data de Criação
+                                    </th>
+
+                                    <th scope="col">
+                                        Valor
+                                    </th>
+
+                                    <th scope="col">
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var orcamento in orcamentos)
+                                {
+                                    <tr>
+                                        <td scope="row">
+                                            @{var clientes = string.Join(", ", orcamento.Clientes.Select(c => c.Nome));}
+                                            @Html.DisplayFor(item => clientes)
+                                        </td>
+
+                                        <td>
+                                            @{var data = orcamento.DataCriacao.ToShortDateString();}
+                                            @Html.DisplayFor(item => data)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(item => orcamento.ValorTotal)
+                                        </td>
+
+                                        <td>
+                                            @Html.ActionLink("Ver Detalhes", "Edit", "Vendas", new { id = orcamento.Id }, new { @class = "btn btn-primary btn-sm py-0"})
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    @Html.ActionLink("Ver Todos", "Index", "Vendas", new { status = "orcamento" }, new { @class = "btn btn-outline-primary btn-sm" })
+                }
+                else
+                {
+                    <div class="alert alert-warning flex-grow-1 m-0" role="alert">
+                        <p>Ainda não há nenhum orçamento.</p>
+                    </div> 
+                }
+
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Contas à Receber</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Vendas em aberto</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
+
+        <div class="vr"></div>
+
+        <div class="card flex-grow-1 w-50 shadow-sm" style="min-height: 300px">
+            <div class="card-body d-flex flex-column gap-3">
+                <h5 class="card-title m-0">Vendas em Aberto</h5>
+                
+                @if(emAberto.Any())
+                {
+                    <div class="border flex-grow-1">
+                        <table class="table table-hover table-sm">
+                            <thead>
+                           
+                                <tr>
+                                    <th scope="col" class="col-5">
+                                        Clientes
+                                    </th>
+
+                                    <th scope="col">
+                                        Data de Criação
+                                    </th>
+
+                                    <th scope="col">
+                                        Valor
+                                    </th>
+
+                                    <th scope="col">
+                                        Ações
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var venda in emAberto)
+                                {
+                                    <tr>
+                                        <td scope="row">
+                                            @{var clientes = string.Join(", ", venda.Clientes.Select(c => c.Nome));}
+                                            @Html.DisplayFor(item => clientes)
+                                        </td>
+
+                                        <td>
+                                            @{var data = venda.DataCriacao.ToShortDateString();}
+                                            @Html.DisplayFor(item => data)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(item => venda.ValorTotal)
+                                        </td>
+
+                                        <td>
+                                            @Html.ActionLink("Ver Detalhes", "Edit", "Vendas", new { id = venda.Id }, new { @class = "btn btn-primary btn-sm py-0"})
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @Html.ActionLink("Ver Todas", "Index", "Vendas", new { status = "emaberto" }, new { @class = "btn btn-outline-primary btn-sm" })
+                }
+                else
+                {
+                    <div class="alert alert-warning flex-grow-1 m-0" role="alert">
+                        <p>Ainda não há nenhuma venda em aberto.</p>
+                    </div> 
+                }
             </div>
         </div>
     </div>

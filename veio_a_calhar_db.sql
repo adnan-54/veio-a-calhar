@@ -79,36 +79,6 @@ CREATE TABLE Produtos(
 	Quantidade DECIMAL(8, 2) NOT NULL
 )
 
-CREATE TABLE Formas_Pagamento(
-	Id INT PRIMARY KEY IDENTITY,
-	Nome VARCHAR(32) NOT NULL,
-	Maximo_Parcelas INT NOT NULL,
-)
-
-INSERT INTO Formas_Pagamento VALUES('Dinheiro', 1)
-INSERT INTO Formas_Pagamento VALUES('Boleto', 1)
-INSERT INTO Formas_Pagamento VALUES('Pix', 1)
-INSERT INTO Formas_Pagamento VALUES('Cartão Crédito', 12)
-INSERT INTO Formas_Pagamento VALUES('Cartão Débito', 1)
-
-CREATE TABLE Pagamentos(
-	Id INT PRIMARY KEY IDENTITY,
-	Id_Pagador INT FOREIGN KEY REFERENCES Pessoas(Id),
-	Id_Favorecido INT FOREIGN KEY REFERENCES Pessoas(Id),
-	Id_Forma_Pagamento INT FOREIGN KEY REFERENCES Formas_Pagamento(Id),
-)
-
-CREATE TABLE Parcelas(
-	Id INT PRIMARY KEY IDENTITY,
-	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
-	Numero INT NOT NULL,
-	Valor MONEY NOT NULL,
-	Porcentagem_Desconto INT NOT NULL,
-	Valor_Pago MONEY,
-	Data_Vencimento DATE NOT NULL,
-	Data_Pagamento DATE
-)
-
 CREATE TABLE Status_Transacaos(
 	Id INT PRIMARY KEY IDENTITY,
 	[Status] VARCHAR(32) NOT NULL,
@@ -121,7 +91,6 @@ INSERT INTO Status_Transacaos VALUES ('Cancelado')
 
 CREATE TABLE Transacoes(
 	Id INT PRIMARY KEY IDENTITY,
-	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
 	Id_Status INT FOREIGN KEY REFERENCES Status_Transacaos(Id),
 	Data_Criacao DATETIME NOT NULL,
 	Data_Fechamento DATETIME,
@@ -139,17 +108,17 @@ CREATE TABLE Transacoes_Produtos(
 
 CREATE TABLE Vendas(
 	Id INT PRIMARY KEY REFERENCES Transacoes(Id),
-	Previsao_Inicio DATETIME NOT NULL,
-	Previsao_Entrega DATETIME NOT NULL
+	Previsao_Inicio DATETIME,
+	Previsao_Entrega DATETIME
 )
 
-CREATE TABLE Venda_Clientes(
+CREATE TABLE Vendas_Clientes(
 	Id INT PRIMARY KEY IDENTITY,
 	Id_Venda INT FOREIGN KEY REFERENCES Vendas(Id),
 	Id_Cliente INT FOREIGN KEY REFERENCES Clientes(Id)
 )
 
-CREATE TABLE Venda_Funcionarios(
+CREATE TABLE Vendas_Funcionarios(
 	Id INT PRIMARY KEY IDENTITY,
 	Id_Venda INT FOREIGN KEY REFERENCES Vendas(Id),
 	Id_Funcionario INT FOREIGN KEY REFERENCES Funcionarios(Id)
@@ -160,4 +129,35 @@ CREATE TABLE Compras(
 	Id_Fornecedor INT FOREIGN KEY REFERENCES Fornecedores(Id),
 	Data_Compra DATETIME NOT NULL,
 	Data_Entrega DATETIME NOT NULL,
+)
+
+CREATE TABLE Formas_Pagamento(
+	Id INT PRIMARY KEY IDENTITY,
+	Nome VARCHAR(32) NOT NULL,
+	Maximo_Parcelas INT NOT NULL,
+)
+
+INSERT INTO Formas_Pagamento VALUES('À Vista', 1)
+INSERT INTO Formas_Pagamento VALUES('Boleto', 1)
+INSERT INTO Formas_Pagamento VALUES('Pix', 1)
+INSERT INTO Formas_Pagamento VALUES('Cartão Crédito', 12)
+INSERT INTO Formas_Pagamento VALUES('Cartão Débito', 1)
+
+CREATE TABLE Pagamentos(
+	Id INT PRIMARY KEY IDENTITY,
+	Id_Transacao INT FOREIGN KEY REFERENCES Transacoes(Id),
+	Id_Pagador INT FOREIGN KEY REFERENCES Pessoas(Id),
+	Id_Favorecido INT FOREIGN KEY REFERENCES Pessoas(Id),
+	Id_Forma_Pagamento INT FOREIGN KEY REFERENCES Formas_Pagamento(Id),
+)
+
+CREATE TABLE Parcelas(
+	Id INT PRIMARY KEY IDENTITY,
+	Id_Pagamento INT FOREIGN KEY REFERENCES Pagamentos(Id),
+	Numero INT NOT NULL,
+	Valor MONEY NOT NULL,
+	Porcentagem_Desconto INT NOT NULL,
+	Valor_Pago MONEY,
+	Data_Vencimento DATE NOT NULL,
+	Data_Pagamento DATE
 )
