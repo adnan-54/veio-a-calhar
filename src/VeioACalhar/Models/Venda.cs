@@ -15,6 +15,4 @@ public record Venda : Transacao
     public IEnumerable<Cliente> Clientes { get; init; }
 
     public IEnumerable<Funcionario> Funcionarios { get; init; }
-
-    public decimal ValorTotal => Produtos.Sum(p => p.ValorTotal);
 }

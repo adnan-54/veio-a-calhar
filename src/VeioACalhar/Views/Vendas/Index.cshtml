@@ -65,7 +65,7 @@
                         </td>
 
                         <td>
-                            @{var clientes = string.Join(',', venda.Clientes.Select(c => c.Nome));}
+                            @{var clientes = string.Join(",", venda.Clientes.Select(c => c.Nome));}
                             @Html.DisplayFor(item => clientes)
                         </td>
 

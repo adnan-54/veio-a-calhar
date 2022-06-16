@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using VeioACalhar.Models;
 using VeioACalhar.Repositories;
+using VeioACalhar.Services;
 using VeioACalhar.ViewModels;
 
 namespace VeioACalhar.Controllers;
@@ -13,14 +14,18 @@ public class VendasController : Controller
     private readonly IFuncionarioRepository funcionarioRepository;
     private readonly IProdutoRepository produtoRepository;
     private readonly IFormaPagamentoRepository formaPagamentoRepository;
+    private readonly IPagamentoRepository pagamentoRepository;
+    private readonly IUserService userService;
 
-    public VendasController(IVendaRepository vendaRepository, IClienteRepository clienteRepository, IFuncionarioRepository funcionarioRepository, IProdutoRepository produtoRepository, IFormaPagamentoRepository formaPagamentoRepository)
+    public VendasController(IVendaRepository vendaRepository, IClienteRepository clienteRepository, IFuncionarioRepository funcionarioRepository, IProdutoRepository produtoRepository, IFormaPagamentoRepository formaPagamentoRepository, IPagamentoRepository pagamentoRepository, IUserService userService)
     {
         this.vendaRepository = vendaRepository;
         this.clienteRepository = clienteRepository;
         this.funcionarioRepository = funcionarioRepository;
         this.produtoRepository = produtoRepository;
         this.formaPagamentoRepository = formaPagamentoRepository;
+        this.pagamentoRepository = pagamentoRepository;
+        this.userService = userService;
     }
 
     public IActionResult Index(string? search = null, string? status = null)
@@ -351,6 +356,43 @@ public class VendasController : Controller
     [HttpPost]
     public IActionResult FinalizarOrdem(IFormCollection form)
     {
+        var venda = vendaRepository.Get(int.Parse(form["idVenda"]));
+        if (venda.Id == 0)
+            return NotFound();
+        if (venda.Status.Id == 3)
+            throw new InvalidOperationException("Uma venda finalizada não pode ser finalizada novamente");
+
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        var favorecido = funcionarioRepository.GetAll().First(f => f.Usuario == userService.CurrentUser);
+        var pagador = clienteRepository.Get(int.Parse(form["Pagador"]));
+        var formaPagamento = new FormaPagamento { Id = int.Parse(form["FormaPagamento"]) };
+        var valorRecebido = decimal.Parse(form["ValorRecebido"]);
+
+        venda = venda with { DataFechamento = today, Status = new() { Id = 3 } };
+
+        vendaRepository.Update(venda);
+
+        var parcela = new Parcela
+        {
+            Numero = 1,
+            Valor = valorRecebido,
+            PorcentagemDesconto = 0,
+            ValorPago = valorRecebido,
+            DataVencimento = today,
+            DataPagamento = today
+        };
+
+        var pagamento = new Pagamento
+        {
+            Transacao = venda,
+            Pagador = pagador,
+            Favorecido = favorecido,
+            FormaPagamento = formaPagamento,
+            Parcelas = new List<Parcela>() { parcela }
+        };
+
+        pagamentoRepository.Create(pagamento);
+
         return RedirectToAction(nameof(Index));
     }
 
