@@ -13,6 +13,20 @@ Encontram-se também o script SQL para criação do banco de dados e todos os ma
 - Asp Net Core
 - SQL Server
 
+## Dependências
+- .NET SDK > 6.0.301
+- SQL Server > 2019
+
+## Como Executar
+- Execute o script ```veio_a_calhar_db.sql``` do banco de dados no SQLServer
+- Atualize a connection string encontrada no arquivo ```.\src\VeioACalhar\appsettings.json```
+- Execute os seguintes comandos no diretório principal
+```
+cd .\src\VeioACalhar\
+dotnet restore
+dotnet run
+```
+
 ## Integrantes
 Adnan
 
