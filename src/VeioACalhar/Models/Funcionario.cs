@@ -1,3 +1,5 @@
+﻿using System.ComponentModel.DataAnnotations;
+
 namespace VeioACalhar.Models;
 
 public record Funcionario : PessoaFisica
@@ -12,5 +14,7 @@ public record Funcionario : PessoaFisica
 
     public Usuario Usuario { get; init; }
 
+    [DataType(DataType.Currency)]
+    [Display(Name = "Salário")]
     public decimal Salario { get; init; }
 }
