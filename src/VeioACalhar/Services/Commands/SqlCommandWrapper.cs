@@ -34,16 +34,24 @@ public sealed class SqlCommandWrapper : ISqlCommand
 
     public T? ExecuteScalar<T>()
     {
-        var result = ExecuteScalar();
-        if (result is null)
+        try
+        {
+            var result = ExecuteScalar();
+            if (result is null)
+                return default;
+            return (T)result;
+        }
+        catch
+        {
             return default;
-        return (T)result;
+        }
     }
 
     public void AddParameter(string parameterName, object? value)
     {
-        if (value is null)
+        if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
             value = DBNull.Value;
+
         command.Parameters.AddWithValue(parameterName, value);
     }
 

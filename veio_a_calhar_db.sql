@@ -5,7 +5,7 @@ USE veio_a_calhar_db
 
 CREATE TABLE Pessoas(
 	Id INT PRIMARY KEY IDENTITY,
-	Nome VARCHAR(32) NOT NULL,
+	Nome VARCHAR(64) NOT NULL,
 	Observacoes VARCHAR(MAX),
 	Pix VARCHAR(64),
 	Email VARCHAR(64),
@@ -73,7 +73,7 @@ CREATE TABLE Produtos(
 	Id_Fornecedor INT FOREIGN KEY REFERENCES Fornecedores(Id),
 	Id_Unidade INT FOREIGN KEY REFERENCES Unidades(Id),
 	Nome VARCHAR(32) NOT NULL,
-	Descricao VARCHAR(MAX) NOT NULL,
+	Descricao VARCHAR(MAX),
 	Preco_Custo MONEY NOT NULL,
 	Preco_Venda MONEY NOT NULL,
 	Quantidade DECIMAL(8, 2) NOT NULL
