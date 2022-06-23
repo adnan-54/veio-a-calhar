@@ -4,6 +4,12 @@ namespace VeioACalhar.Models;
 
 public abstract record PessoaFisica : Pessoa
 {
+    public PessoaFisica()
+    {
+        Cpf = string.Empty;
+        Rg = string.Empty;
+    }
+
     [StringLength(11, MinimumLength = 11, ErrorMessage = "O CPF deve ter 11 caracteres")]
     [Display(Name = "CPF")]
     public string? Cpf { get; init; }

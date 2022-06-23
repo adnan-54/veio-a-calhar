@@ -7,6 +7,11 @@ public abstract record Pessoa : Entidade
     public Pessoa()
     {
         Nome = string.Empty;
+        Observacoes = string.Empty;
+        Pix = string.Empty;
+        Email = string.Empty;
+        Telefone = string.Empty;
+        Endereco = string.Empty;
     }
 
     [StringLength(64, MinimumLength = 3, ErrorMessage = "O nome precisa ter entre 3 e 64 caracteres")]
@@ -31,7 +36,7 @@ public abstract record Pessoa : Entidade
     [Display(Name = "Telefone")]
     public string? Telefone { get; init; }
 
-    [StringLength(128, ErrorMessage = "O telefone pode ter no maximo 128 caracteres")]
-    [Display(Name = "Telefone")]
+    [StringLength(128, ErrorMessage = "O endereço pode ter no maximo 128 caracteres")]
+    [Display(Name = "Endereço")]
     public string? Endereco { get; init; }
 }

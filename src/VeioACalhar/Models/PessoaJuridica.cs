@@ -4,6 +4,13 @@ namespace VeioACalhar.Models;
 
 public abstract record PessoaJuridica : Pessoa
 {
+    public PessoaJuridica()
+    {
+        NomeFantasia = string.Empty;
+        InscricaoEstadual = string.Empty;
+        Cnpj = string.Empty;
+    }
+
     [StringLength(64, ErrorMessage = "O nome fantasia pode ter no maximo 64 caracteres")]
     [Display(Name = "Nome Fantasia")]
     public string? NomeFantasia { get; init; }

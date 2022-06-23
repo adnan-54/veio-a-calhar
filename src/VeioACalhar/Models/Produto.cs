@@ -9,6 +9,7 @@ public record Produto : Entidade
         Fornecedor = new();
         Nome = string.Empty;
         Unidade = new();
+        Descricao = string.Empty;
     }
 
     public Fornecedor Fornecedor { get; init; }

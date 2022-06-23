@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Data.SqlTypes;
 
 namespace VeioACalhar.Models;
 
@@ -10,6 +9,7 @@ public abstract record Transacao : Entidade
         Produtos = Enumerable.Empty<ProdutoTransacao>();
         Status = new();
         DataCriacao = DateOnly.FromDateTime(DateTime.Today);
+        Observacoes = string.Empty;
     }
 
     [Display(Name = "Produtos")]
